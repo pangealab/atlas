@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn">
+    <sys_rest_message_fn action="DELETE">
+        <authentication_type>inherit_from_parent</authentication_type>
+        <basic_auth_password/>
+        <basic_auth_profile/>
+        <basic_auth_user/>
+        <content/>
+        <function_name>Default GET</function_name>
+        <http_method>get</http_method>
+        <lock>false</lock>
+        <oauth2_profile/>
+        <protocol_name/>
+        <qualified_name>register [ Default GET ]</qualified_name>
+        <rest_endpoint>telery</rest_endpoint>
+        <rest_message display_value="register">2c84e154db1100103b4a90b6db9619e0</rest_message>
+        <sys_class_name>sys_rest_message_fn</sys_class_name>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 16:14:43</sys_created_on>
+        <sys_id>c7846554db1100103b4a90b6db9619ff</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Default GET</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_rest_message_fn_c7846554db1100103b4a90b6db9619ff</sys_update_name>
+        <sys_updated_by>telery</sys_updated_by>
+        <sys_updated_on>2019-11-19 16:14:43</sys_updated_on>
+        <use_basic_auth>false</use_basic_auth>
+        <use_mid_server/>
+        <use_mutual_auth>false</use_mutual_auth>
+    </sys_rest_message_fn>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
+        <instance_name>newyorkdemo01</instance_name>
+        <name>sys_rest_message_fn_c7846554db1100103b4a90b6db9619ff</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn"><sys_rest_message_fn action="INSERT_OR_UPDATE"><authentication_type>inherit_from_parent</authentication_type><basic_auth_password/><basic_auth_profile/><basic_auth_user/><content/><function_name>Default GET</function_name><http_method>get</http_method><lock>false</lock><oauth2_profile/><protocol_name/><qualified_name>register [ Default GET ]</qualified_name><rest_endpoint>telery</rest_endpoint><rest_message display_value="register">2c84e154db1100103b4a90b6db9619e0</rest_message><sys_class_name>sys_rest_message_fn</sys_class_name><sys_created_by>telery</sys_created_by><sys_created_on>2019-11-19 16:14:43</sys_created_on><sys_id>c7846554db1100103b4a90b6db9619ff</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Default GET</sys_name><sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package><sys_policy/><sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope><sys_update_name>sys_rest_message_fn_c7846554db1100103b4a90b6db9619ff</sys_update_name><sys_updated_by>telery</sys_updated_by><sys_updated_on>2019-11-19 16:14:43</sys_updated_on><use_basic_auth>false</use_basic_auth><use_mid_server/><use_mutual_auth>false</use_mutual_auth></sys_rest_message_fn></record_update>]]></payload>
+        <payload_hash>918641936</payload_hash>
+        <record_name>Default GET</record_name>
+        <reverted_from/>
+        <source>e950983edb0508143b4a90b6db9619fe</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 16:14:43</sys_created_on>
+        <sys_id>9f84a554db1100103b4a90b6db961901</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16e8471d8bc0000001</sys_recorded_at>
+        <sys_updated_by>telery</sys_updated_by>
+        <sys_updated_on>2019-11-19 16:14:43</sys_updated_on>
+        <type>HTTP Method</type>
+        <update_guid>9784a55419110010b7f7a10aa3e8c901</update_guid>
+        <update_guid_history>9784a55419110010b7f7a10aa3e8c901:918641936</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 16:17:34</sys_created_on>
+        <sys_db_object display_value="" name="sys_rest_message_fn">sys_rest_message_fn</sys_db_object>
+        <sys_id>04d933a110a84319816325a54ec7c469</sys_id>
+        <sys_metadata>c7846554db1100103b4a90b6db9619ff</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Default GET</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_rest_message_fn_c7846554db1100103b4a90b6db9619ff</sys_update_name>
+        <sys_update_version display_value="sys_rest_message_fn_c7846554db1100103b4a90b6db9619ff">9f84a554db1100103b4a90b6db961901</sys_update_version>
+        <sys_updated_by>telery</sys_updated_by>
+        <sys_updated_on>2019-11-19 16:17:34</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

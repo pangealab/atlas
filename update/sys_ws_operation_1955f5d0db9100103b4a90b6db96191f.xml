@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json</consumes>
+        <consumes_customized>true</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Services</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+    var respData = {};
+	var data = request.body.data;
+	
+	for(var i = 0; i < data.length; i++) {
+		var obj = data[i];
+		
+		var httpEndpoint = new GlideRecord('cmdb_ci_endpoint_http');
+		httpEndpoint.initialize();
+		httpEndpoint.name = obj.host;
+		httpEndpoint.url = obj.host;
+		httpEndpoint.host = obj.host.replace("http://", "").replace("https://", "");
+		httpEndpoint.host_name = obj.host.replace("http://", "").replace("https://", "");
+		httpEndpoint.sys_class_name = "cmdb_ci_endpoint_http";
+		httpEndpoint.sys_class_path = "/!!/!$/#J";
+		httpEndpoint.discovery_source = "ServiceWatch";
+		httpEndpoint.port = "80";
+		httpEndpoint.protocol = "http";
+		var httpEndpointId = httpEndpoint.insert();
+		
+		var businessService = new GlideRecord('cmdb_ci_service_discovered');
+		businessService.initialize();
+		businessService.name = obj.name;
+		businessService.comments = 'Added by DevOps API';
+		var serviceId = businessService.insert();
+		
+		var entryPoint = new GlideRecord('sa_m2m_service_entry_point');
+		entryPoint.initialize();
+		entryPoint.cmdb_ci_endpoint = httpEndpointId;
+		entryPoint.cmdb_ci_service = serviceId;
+		var entryPointId = entryPoint.insert();	
+	}
+	
+	respData.code = '200';
+	respData.type = "register_services";
+	respData.message = "Service created in ServiceNow. Service: " + serviceId;
+	
+    return respData;
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_snc_labs_atlas/register/services</operation_uri>
+        <produces>application/json</produces>
+        <produces_customized>true</produces_customized>
+        <relative_path>/services</relative_path>
+        <request_example>[&#13;
+  {&#13;
+    "name": "string",&#13;
+    "host": "http://foo.com/api/v1/bar"&#13;
+  }&#13;
+]</request_example>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <requires_snc_internal_role>false</requires_snc_internal_role>
+        <short_description>Registers a list of Services with given input array</short_description>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 17:35:39</sys_created_on>
+        <sys_id>1955f5d0db9100103b4a90b6db96191f</sys_id>
+        <sys_mod_count>17</sys_mod_count>
+        <sys_name>Services</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_operation_1955f5d0db9100103b4a90b6db96191f</sys_update_name>
+        <sys_updated_by>telery</sys_updated_by>
+        <sys_updated_on>2019-11-19 19:27:23</sys_updated_on>
+        <web_service_definition display_value="Register">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

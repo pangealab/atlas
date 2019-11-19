@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_definition">
+    <sys_ws_definition action="DELETE">
+        <active>true</active>
+        <base_uri>/api/x_snc_labs_atlas/service</base_uri>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_version>No active default version</default_version>
+        <doc_link/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <is_versioned>false</is_versioned>
+        <name>service</name>
+        <namespace>x_snc_labs_atlas</namespace>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <service_id>service</service_id>
+        <short_description/>
+        <sys_class_name>sys_ws_definition</sys_class_name>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 16:13:57</sys_created_on>
+        <sys_id>e2c32dd0db1100103b4a90b6db9619e3</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>service</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_definition_e2c32dd0db1100103b4a90b6db9619e3</sys_update_name>
+        <sys_updated_by>telery</sys_updated_by>
+        <sys_updated_on>2019-11-19 16:13:57</sys_updated_on>
+    </sys_ws_definition>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
+        <instance_name>newyorkdemo01</instance_name>
+        <name>sys_ws_definition_e2c32dd0db1100103b4a90b6db9619e3</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_definition"><sys_ws_definition action="INSERT_OR_UPDATE"><active>true</active><base_uri>/api/x_snc_labs_atlas/service</base_uri><consumes>application/json,application/xml,text/xml</consumes><consumes_customized>false</consumes_customized><default_version>No active default version</default_version><doc_link/><enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl><is_versioned>false</is_versioned><name>service</name><namespace>x_snc_labs_atlas</namespace><produces>application/json,application/xml,text/xml</produces><produces_customized>false</produces_customized><service_id>service</service_id><short_description/><sys_class_name>sys_ws_definition</sys_class_name><sys_created_by>telery</sys_created_by><sys_created_on>2019-11-19 16:13:57</sys_created_on><sys_id>e2c32dd0db1100103b4a90b6db9619e3</sys_id><sys_mod_count>0</sys_mod_count><sys_name>service</sys_name><sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package><sys_policy/><sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope><sys_update_name>sys_ws_definition_e2c32dd0db1100103b4a90b6db9619e3</sys_update_name><sys_updated_by>telery</sys_updated_by><sys_updated_on>2019-11-19 16:13:57</sys_updated_on></sys_ws_definition></record_update>]]></payload>
+        <payload_hash>-1575032359</payload_hash>
+        <record_name>service</record_name>
+        <reverted_from/>
+        <source>e950983edb0508143b4a90b6db9619fe</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 16:13:58</sys_created_on>
+        <sys_id>c064add0db1100103b4a90b6db961992</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16e847126bb0000001</sys_recorded_at>
+        <sys_updated_by>telery</sys_updated_by>
+        <sys_updated_on>2019-11-19 16:13:58</sys_updated_on>
+        <type>Scripted REST API</type>
+        <update_guid>0864add0521100105288377d05e57091</update_guid>
+        <update_guid_history>0864add0521100105288377d05e57091:-1575032359</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 16:14:26</sys_created_on>
+        <sys_db_object display_value="" name="sys_ws_definition">sys_ws_definition</sys_db_object>
+        <sys_id>0c8310616a504bc4bc83e16540f067f1</sys_id>
+        <sys_metadata>e2c32dd0db1100103b4a90b6db9619e3</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>service</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_ws_definition_e2c32dd0db1100103b4a90b6db9619e3</sys_update_name>
+        <sys_update_version display_value="sys_ws_definition_e2c32dd0db1100103b4a90b6db9619e3">c064add0db1100103b4a90b6db961992</sys_update_version>
+        <sys_updated_by>telery</sys_updated_by>
+        <sys_updated_on>2019-11-19 16:14:26</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
