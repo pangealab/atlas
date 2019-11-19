@@ -23,8 +23,8 @@
 		httpEndpoint.sys_class_name = "cmdb_ci_endpoint_http";
 		httpEndpoint.sys_class_path = "/!!/!$/#J";
 		httpEndpoint.discovery_source = "ServiceWatch";
-		httpEndpoint.port = "80";
-		httpEndpoint.protocol = "http";
+		httpEndpoint.port = "443";
+		httpEndpoint.protocol = "https";
 		var httpEndpointId = httpEndpoint.insert();
 		
 		var businessService = new GlideRecord('cmdb_ci_service_discovered');
@@ -64,14 +64,14 @@
         <sys_created_by>telery</sys_created_by>
         <sys_created_on>2019-11-19 17:35:39</sys_created_on>
         <sys_id>1955f5d0db9100103b4a90b6db96191f</sys_id>
-        <sys_mod_count>17</sys_mod_count>
+        <sys_mod_count>18</sys_mod_count>
         <sys_name>Services</sys_name>
         <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_ws_operation_1955f5d0db9100103b4a90b6db96191f</sys_update_name>
         <sys_updated_by>telery</sys_updated_by>
-        <sys_updated_on>2019-11-19 19:27:23</sys_updated_on>
+        <sys_updated_on>2019-11-19 20:25:08</sys_updated_on>
         <web_service_definition display_value="Register">2b576998db1100103b4a90b6db961977</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
