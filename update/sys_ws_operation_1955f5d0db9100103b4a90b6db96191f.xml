@@ -72,7 +72,7 @@
         <sys_update_name>sys_ws_operation_1955f5d0db9100103b4a90b6db96191f</sys_update_name>
         <sys_updated_by>telery</sys_updated_by>
         <sys_updated_on>2019-11-19 20:25:08</sys_updated_on>
-        <web_service_definition display_value="Register">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
 </record_update>
