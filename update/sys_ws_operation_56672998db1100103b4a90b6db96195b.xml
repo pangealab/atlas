@@ -6,7 +6,7 @@
         <default_operation_uri/>
         <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
         <http_method>POST</http_method>
-        <name>Service</name>
+        <name>Service v1</name>
         <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 	
     var respData = {};
@@ -87,7 +87,7 @@
         <relative_path>/v1/service</relative_path>
         <request_example>{&#13;
   "name": "castor",&#13;
-  "parent": "Olympus-ERP"&#13;
+  "parent": "Olympus"&#13;
   "host": "http://foo.com/api/v1/castor"&#13;
 }</request_example>
         <requires_acl_authorization>false</requires_acl_authorization>
@@ -98,14 +98,14 @@
         <sys_created_by>telery</sys_created_by>
         <sys_created_on>2019-11-19 16:28:40</sys_created_on>
         <sys_id>56672998db1100103b4a90b6db96195b</sys_id>
-        <sys_mod_count>31</sys_mod_count>
-        <sys_name>Service</sys_name>
+        <sys_mod_count>33</sys_mod_count>
+        <sys_name>Service v1</sys_name>
         <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_ws_operation_56672998db1100103b4a90b6db96195b</sys_update_name>
         <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2019-12-07 22:18:34</sys_updated_on>
+        <sys_updated_on>2019-12-07 22:50:51</sys_updated_on>
         <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>

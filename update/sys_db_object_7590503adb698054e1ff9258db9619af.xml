@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_db_object">
+    <sys_db_object action="INSERT_OR_UPDATE">
+        <access/>
+        <actions_access>true</actions_access>
+        <alter_access>true</alter_access>
+        <caller_access/>
+        <client_scripts_access>true</client_scripts_access>
+        <configuration_access>false</configuration_access>
+        <create_access>true</create_access>
+        <create_access_controls>false</create_access_controls>
+        <delete_access>false</delete_access>
+        <extension_model/>
+        <is_extendable>false</is_extendable>
+        <label>Kubernetes-Query Results</label>
+        <live_feed_enabled>false</live_feed_enabled>
+        <name>x_snc_labs_atlas_u_cmdb_qb_result_d39bdbb925c0c71d8b94855e67cece78038b7db9</name>
+        <number_ref/>
+        <provider_class/>
+        <read_access>true</read_access>
+        <scriptable_table>false</scriptable_table>
+        <super_class display_value="Query Builder Results" name="cmdb_qb_result_base">52090e07db500010e1ff9258db96193e</super_class>
+        <sys_class_code>!!</sys_class_code>
+        <sys_class_name>sys_db_object</sys_class_name>
+        <sys_class_path>/!!</sys_class_path>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-09 14:48:25</sys_created_on>
+        <sys_id>7590503adb698054e1ff9258db9619af</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Labs Atlas U CMDB Qb Result D39bdbb925c0c71d8b94855e67cece78038b7db9</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_db_object_7590503adb698054e1ff9258db9619af</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-09 14:48:25</sys_updated_on>
+        <update_access>true</update_access>
+        <user_role/>
+        <ws_access>true</ws_access>
+    </sys_db_object>
+</record_update>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Services v2</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    // Constants
+    var CLASSNAME = "cmdb_ci_service_discovered";
+	// var CLASSNAME = "cmdb_ci_kubernetes_service";
+
+    // Input
+    var servicesInput = request.body.data;
+
+    // Capture Business Service Properties
+    businessServiceName = servicesInput.name;
+    businessServiceComments = servicesInput.comments;
+
+    // Transform 1 - Items
+    services1 = servicesInput.services;
+    items1 = [];
+    for (var i = 0; i < services1.length; i++) {
+        service1 = services1[i];
+        // Set Item
+        item1 = {
+            "className": CLASSNAME,
+            "values": {
+                "name": service1.name,
+                "host_name": service1.host,
+				"sys_class_name": CLASSNAME
+            }
+        };
+        items1.push(item1);
+    }
+
+    // Set Payload 1
+    payload1 = {
+        items: items1
+    };
+	
+	// DEBUG
+	log("Payload 1: " + JSON.stringify(payload1));
+
+    // Call IES with Payload 1
+    result1 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload1)));
+	
+	// DEBUG
+	log("Result 1: " + JSON.stringify(result1));
+	
+	// Create Services Lookup
+	items2 = result1.items;
+    var index = {};
+    for (var j = 0; j < services1.length; j++) {
+        index[services1[j].name] = items2[j].sysId;
+    }
+	
+    // Transform 2 - Service Relations
+    relationships1 = servicesInput.relationships;
+    service_relations1 = [];
+    for (var k = 0; k < relationships1.length; k++) {
+        relationship1 = relationships1[k];
+        // Test for nulls
+        parent = relationship1.parent === null ? parent = null : parent = index[relationship1.parent];
+        child = relationship1.child === null ? child = null : child = index[relationship1.child];
+        // Set Service Relation
+        service_relation1 = {
+            "parent": parent,
+            "child": child
+        };
+        service_relations1.push(service_relation1);
+    }
+
+    // Set Payload 2
+    payload2 = {
+        "name": businessServiceName,
+        "comments": businessServiceComments,
+        "service_relations": service_relations1
+    };
+	
+	// DEBUG
+	log("Payload 2: " + JSON.stringify(payload2));
+
+    // Call IES with Payload 1
+    result2 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload2)));
+
+    // DEBUG
+    log("Result 2: " + JSON.stringify(result2));
+
+})(request, response);
+
+function log(message) {
+    gs.info(message);
+}]]></operation_script>
+        <operation_uri>/api/x_snc_labs_atlas/register/v2/services</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/v2/services</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description>Register Services</short_description>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-07 22:53:38</sys_created_on>
+        <sys_id>cc5ce78edbad8c14e1ff9258db961912</sys_id>
+        <sys_mod_count>118</sys_mod_count>
+        <sys_name>Services v2</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_operation_cc5ce78edbad8c14e1ff9258db961912</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-12 03:28:53</sys_updated_on>
+        <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

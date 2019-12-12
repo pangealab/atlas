@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="" label="Kubernetes-Query Results" language="en" table="x_snc_labs_atlas_u_cmdb_qb_result_7940be32d26d8c59c7ec1d16e2ae7d286af994a6">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element/>
+            <help/>
+            <hint/>
+            <label>Kubernetes-Query Results</label>
+            <language>en</language>
+            <name>x_snc_labs_atlas_u_cmdb_qb_result_7940be32d26d8c59c7ec1d16e2ae7d286af994a6</name>
+            <plural>Kubernetes-Query Results</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>aangelo</sys_created_by>
+            <sys_created_on>2019-12-09 15:30:10</sys_created_on>
+            <sys_id>592a543adba98054e1ff9258db96192a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Kubernetes-Query Results</sys_name>
+            <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+            <sys_update_name>sys_documentation_x_snc_labs_atlas_u_cmdb_qb_result_7940be32d26d8c59c7ec1d16e2ae7d286af994a6__en</sys_update_name>
+            <sys_updated_by>aangelo</sys_updated_by>
+            <sys_updated_on>2019-12-09 15:30:10</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>
