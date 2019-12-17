@@ -3,10 +3,10 @@
         <active>true</active>
         <consumes>application/json</consumes>
         <consumes_customized>true</consumes_customized>
-        <default_operation_uri>/api/x_snc_labs_atlas/register/service</default_operation_uri>
+        <default_operation_uri/>
         <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
         <http_method>POST</http_method>
-        <name>Service (v1)</name>
+        <name>Service (v2)</name>
         <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 	
     var respData = {};
@@ -81,7 +81,7 @@
 
     return respData;
 })(request, response);]]></operation_script>
-        <operation_uri>/api/x_snc_labs_atlas/v1/register/service</operation_uri>
+        <operation_uri>/api/x_snc_labs_atlas/v2/register/service</operation_uri>
         <produces>application/json</produces>
         <produces_customized>true</produces_customized>
         <relative_path>/service</relative_path>
@@ -95,18 +95,18 @@
         <requires_snc_internal_role>false</requires_snc_internal_role>
         <short_description>Register a Service</short_description>
         <sys_class_name>sys_ws_operation</sys_class_name>
-        <sys_created_by>telery</sys_created_by>
-        <sys_created_on>2019-11-19 16:28:40</sys_created_on>
-        <sys_id>56672998db1100103b4a90b6db96195b</sys_id>
-        <sys_mod_count>37</sys_mod_count>
-        <sys_name>Service (v1)</sys_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-17 16:53:46</sys_created_on>
+        <sys_id>940ab591db390810e1ff9258db961907</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Service (v2)</sys_name>
         <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
-        <sys_update_name>sys_ws_operation_56672998db1100103b4a90b6db96195b</sys_update_name>
+        <sys_update_name>sys_ws_operation_940ab591db390810e1ff9258db961907</sys_update_name>
         <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2019-12-17 16:56:32</sys_updated_on>
+        <sys_updated_on>2019-12-17 16:55:27</sys_updated_on>
         <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
-        <web_service_version display_value="v1">5768b1dddbf50810e1ff9258db961947</web_service_version>
+        <web_service_version display_value="v2">c00ab591db390810e1ff9258db961901</web_service_version>
     </sys_ws_operation>
 </record_update>

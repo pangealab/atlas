@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Services v2</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    // Constants
+    var CLASSNAME = "cmdb_ci_service_discovered";
+	// var CLASSNAME = "cmdb_ci_kubernetes_service";
+
+    // Input / Output
+    var requestData = request.body.data;
+    var responseData = {};
+
+    // Capture Business Service Properties
+    businessServiceName = requestData.name;
+    businessServiceComments = requestData.comments;
+
+    // Transform 1 - Items
+    services1 = requestData.services;
+    items1 = [];
+    for (var i = 0; i < services1.length; i++) {
+        service1 = services1[i];
+        // Set Item
+        item1 = {
+            "className": CLASSNAME,
+            "values": {
+                "name": service1.name,
+                "host_name": service1.host,
+				"sys_class_name": CLASSNAME
+            }
+        };
+        items1.push(item1);
+    }
+
+    // Set Payload 1
+    payload1 = {
+        items: items1
+    };
+	
+	// DEBUG
+	log("Payload 1: " + JSON.stringify(payload1));
+
+    // Call IES with Payload 1
+    result1 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload1)));
+	
+	// DEBUG
+	log("Result 1: " + JSON.stringify(result1));
+	
+	// Create Services Lookup
+	items2 = result1.items;
+    var index = {};
+    for (var j = 0; j < services1.length; j++) {
+        index[services1[j].name] = items2[j].sysId;
+    }
+	
+    // Transform 2 - Service Relations
+    relationships1 = requestData.relationships;
+    service_relations1 = [];
+    for (var k = 0; k < relationships1.length; k++) {
+        relationship1 = relationships1[k];
+        // Test for nulls
+        parent = relationship1.parent === null ? parent = null : parent = index[relationship1.parent];
+        child = relationship1.child === null ? child = null : child = index[relationship1.child];
+        // Set Service Relation
+        service_relation1 = {
+            "parent": parent,
+            "child": child
+        };
+        service_relations1.push(service_relation1);
+    }   
+
+    // Set Payload 2
+    payload2 = {
+        "name": businessServiceName,
+        "comments": businessServiceComments,
+        "service_relations": service_relations1
+    };
+	
+	// DEBUG
+	log("Payload 2: " + JSON.stringify(payload2));
+	
+	// Call CIS with Payload 2
+	var createOrUpdateServiceHandler = new global.CreateOrUpdateITService();
+	var result2 =  createOrUpdateServiceHandler.processJSON(JSON.stringify(payload2));
+	
+    // DEBUG
+    log("Result 2: " + JSON.stringify(result2));
+
+    responseData.code = '200';
+	responseData.type = "register_services";
+    responseData.message = "Services created in ServiceNow: " + services1.length;
+
+    return responseData;
+
+})(request, response);
+
+// Log function
+function log(message) {
+    gs.info(message);
+}]]></operation_script>
+        <operation_uri>/api/x_snc_labs_atlas/register/v2/services</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/v2/services</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description>Register Services</short_description>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-07 22:53:38</sys_created_on>
+        <sys_id>cc5ce78edbad8c14e1ff9258db961912</sys_id>
+        <sys_mod_count>130</sys_mod_count>
+        <sys_name>Services v2</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_operation_cc5ce78edbad8c14e1ff9258db961912</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-16 15:27:19</sys_updated_on>
+        <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
+        <instance_name>newyorkdemo01</instance_name>
+        <name>sys_ws_operation_cc5ce78edbad8c14e1ff9258db961912</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;POST&lt;/http_method&gt;&lt;name&gt;Services v2&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    // Constants
+    var CLASSNAME = "cmdb_ci_service_discovered";
+	// var CLASSNAME = "cmdb_ci_kubernetes_service";
+
+    // Input / Output
+    var requestData = request.body.data;
+    var responseData = {};
+
+    // Capture Business Service Properties
+    businessServiceName = requestData.name;
+    businessServiceComments = requestData.comments;
+
+    // Transform 1 - Items
+    services1 = requestData.services;
+    items1 = [];
+    for (var i = 0; i &lt; services1.length; i++) {
+        service1 = services1[i];
+        // Set Item
+        item1 = {
+            "className": CLASSNAME,
+            "values": {
+                "name": service1.name,
+                "host_name": service1.host,
+				"sys_class_name": CLASSNAME
+            }
+        };
+        items1.push(item1);
+    }
+
+    // Set Payload 1
+    payload1 = {
+        items: items1
+    };
+	
+	// DEBUG
+	log("Payload 1: " + JSON.stringify(payload1));
+
+    // Call IES with Payload 1
+    result1 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload1)));
+	
+	// DEBUG
+	log("Result 1: " + JSON.stringify(result1));
+	
+	// Create Services Lookup
+	items2 = result1.items;
+    var index = {};
+    for (var j = 0; j &lt; services1.length; j++) {
+        index[services1[j].name] = items2[j].sysId;
+    }
+	
+    // Transform 2 - Service Relations
+    relationships1 = requestData.relationships;
+    service_relations1 = [];
+    for (var k = 0; k &lt; relationships1.length; k++) {
+        relationship1 = relationships1[k];
+        // Test for nulls
+        parent = relationship1.parent === null ? parent = null : parent = index[relationship1.parent];
+        child = relationship1.child === null ? child = null : child = index[relationship1.child];
+        // Set Service Relation
+        service_relation1 = {
+            "parent": parent,
+            "child": child
+        };
+        service_relations1.push(service_relation1);
+    }   
+
+    // Set Payload 2
+    payload2 = {
+        "name": businessServiceName,
+        "comments": businessServiceComments,
+        "service_relations": service_relations1
+    };
+	
+	// DEBUG
+	log("Payload 2: " + JSON.stringify(payload2));
+	
+	// Call CIS with Payload 2
+	var createOrUpdateServiceHandler = new global.CreateOrUpdateITService();
+	var result2 =  createOrUpdateServiceHandler.processJSON(JSON.stringify(payload2));
+	
+    // DEBUG
+    log("Result 2: " + JSON.stringify(result2));
+
+    responseData.code = '200';
+	responseData.type = "register_services";
+    responseData.message = "Services created in ServiceNow: " + services1.length;
+
+    return responseData;
+
+})(request, response);
+
+// Log function
+function log(message) {
+    gs.info(message);
+}]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_snc_labs_atlas/register/v2/services&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/v2/services&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;true&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;true&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;true&lt;/requires_snc_internal_role&gt;&lt;short_description&gt;Register Services&lt;/short_description&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;aangelo&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2019-12-07 22:53:38&lt;/sys_created_on&gt;&lt;sys_id&gt;cc5ce78edbad8c14e1ff9258db961912&lt;/sys_id&gt;&lt;sys_mod_count&gt;130&lt;/sys_mod_count&gt;&lt;sys_name&gt;Services v2&lt;/sys_name&gt;&lt;sys_package display_value="labs_atlas" source="x_snc_labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_cc5ce78edbad8c14e1ff9258db961912&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;aangelo&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2019-12-16 15:27:19&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="NOW CLI API Register Service"&gt;2b576998db1100103b4a90b6db961977&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>2090782266</payload_hash>
+        <record_name>Services v2</record_name>
+        <reverted_from/>
+        <source>e950983edb0508143b4a90b6db9619fe</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-16 15:27:19</sys_created_on>
+        <sys_id>b39c9805db3184103b4a90b6db9619d9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16f0f52252f0000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-16 15:27:19</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>7b9c980558318410995a17261d0f7fd8</update_guid>
+        <update_guid_history>7b9c980558318410995a17261d0f7fd8:2090782266,5f5bd841bafd44104e063c3e318e932d:838402810,a91bd4050afd44106f0749c2ce5c9030:1235481080,239fa40cbe79c854850b2a0f046d9b60:-948510507,d8de20486b79c854de7fd6b949a1d1b7:1958124765,9e05e8b3aa2d4854187f14dcea9dc058:-606955245,23e4e8b3de2d4854be0e6c5d123ec9b5:540050267,5ac4e4b3a12d48541f19e41209f480d5:-970728218,05c3a833932d485414743d211074c5d1:-1173671324,6532a47fbce9485461e094c0d994169d:270438356,93e1a47fd5e94854f3597bb0f7b29b7c:-2110011334,03d0e4fb20e948541ca7639a702a390c:336278826,f8d191abf2250854f42dfb182eb773b7:2033506631,d35e49e3f625085434ad39e9e3aa7141:-1188544134,ba4dc963d32508549bf1a509a7633ac1:-315864629,f40dc96339250854876f2550d2e5d6f9:-690561131,77ab45ef4ee10854913b06c4b1c4f4e3:-1951749693,4ff6cda7bbe1085416b31ccd3b0f8ade:907498584,7ed6cda7d5e10854af605deda0f34a42:-1544704585,b6564d67fbe108540006448cbe76152b:-991563445,5b26c16710e108547f5181d00bd0ce7b:907498584,1d95c92771e1085456bf13770da3bf8b:-1020739453,0655cde356e108541301a816fceb04a2:447749565,122589e31ee10854fcaa1094f777a175:1155337285,95e4c1e368e10854216596271a204f5f:-732726337,e1e30d63f3e108548960c996d2ae2754:1823773596,5db249ef4ba108543b99554bfc370011:550783384,f9c101af43a108546a0b16a5a98371c6:1122599367,94c00deb18a10854a2e54301fdd9e941:-42590731,806b3ca3a8a10854bee70d061a99b065:-972888401,2cfaf0a367a10854013c933e19782725:-1042481460,27c7f06f076108546e625cb3006bb537:377902287,46c5b42bec610854d8acaed1a5dda355:-1621749303,5565f42b196108546342355cdf33e993:-1814129207,f2d4b4e742610854e44d4735ed2957aa:1258985927,d263bc278e610854efd67a9136e489c9:-1502781522,4a13bce368610854b33ed1d92798353c:1415826003,8bb2b0e35c6108540c4f160702dbcf0a:-2082378386,d6513c234e6108549e74ef913cc6c4e9:-529017545,cd5ea4ebb62108545eb5c655afd20def:992284458,428d20ab52210854f51afccf97046464:627784618,b026646f79edc45493b05c2783a864f2:1079721898,6b45202fd3edc454c52fbe3e56205568:50586352,21e3646b69edc454a10126f4c8512877:-2094979490,a1e1135708a5c4549281993c294a3431:547924332,34c18b5ba125c454eb8f014c93e435e2:-1837364824,0b81c35bf625c4541eb9d567fbb6eeb2:-1466770015,bf218f1b6625c454662f0f26bebbed37:-1776994285,d901471b2e25c4540de55b5c1683b019:-1721360162,1aeefe17fc25c454a2e32edf202bef53:-1906608499,67ceb617a925c454f694d9307d8a852a:1729348489,037efad34f25c454740cf86e9602c12a:-222165982,a54bb29fd2e1c45454f25ee6f6da61a2:-1598316825,2278ba5b8de1c45490a12e52b1c210ed:-726973541,62687a5b62e1c454d60b66ffc54b8408:-469975369,af487e1bcfe1c454e46bd7c1441e5bdb:35533277,06a77ed7f7e1c454f0b534bccd4d8820:2018144315,72677ad702e1c45426cc2e4e34e9f7b2:644369459,4a31ba1fe4a1c454a1c52e64ccca5945:1937410436,d04fe65b61a1c45489d465c9e31d5c3b:2145065460,0bd076f25ca9c05480163f57b15eb741:-749000606,d9721e3223e5c0542cc98886c1e9f8b6:-1462048407,b0325632c4e5c05470e92babe5c96d79:2105481151,dff056befda5c054c3e7d2458d0b7a4f:569763388,c2c0d2be72a5c05496f14e064ad39c9c:-1571521384,71ff4a3edaa5c05406186aea6085e09c:534748132,85eeb9fea825c05421e2ea451699bc15:787297501,102e71fe4525c0549104477d4eccbac0:534748132,eabc713eb125c0542b05e0492d5ef907:1828590729,7f8c313e9425c05446d20ea8f64500ae:79155859,fafab93ab225c0549f13e8809c3bc1c9:-1982612201,52aab9f69325c054d738ea48f93c7ea4:-2125558508,358a39f69125c05419bdf9d7c2dc7b3a:-409129336,72d9b1f69325c054cff77e1bdb9cb57a:257262588,58a93db6ef25c054903e8a68bb418cc1:2107234941,b27835761625c054ac159e24ee505f1a:-1618608238,9bb70576d7ed8054e459f8558c274667:-1112647982,fba7493670ed80545f12c915b85cd2f6:-1846806945,38a14dbaffad80547c640b73aa13cda5:826748602,cc814d7a74ad8054abcd4d6dc56985da:-1778339877,2301093a88ad8054b1bfc58448272a3b:-1208297349,f1b08d3ab9ad80547b08f818b1a3f90f:-879636869,560fbc763aad8054b908be8a0e39171a:-2025195140,a43e343663ad805494cd2153f9850468:663005645,7eed34360ead8054324006b407956f3b:1852090014,b68db0f2e1ad80546077b7ec391dd118:694106958,eb7b703256ad8054a71a80ae19d21946:-401166034,b41bf0fe936d80547a6d7b8af840a4a3:-836640099,5afa70fe956d8054a0e156c5a682b4db:-919946879,defb443e32298054084c74ec98d7a1e7:-642464004,2dbb4cfa42298054af0ed8f35479842d:481034648,236056ea33e94054a5f3b3eaad57beb4:-347969720,195d4e6621e94054c2708dc5a434a93a:-1361647116,70fcca263ee94054e044bc3db036eabc:296024553,c69c8a2658e940545f8ea29b5a3abbdc:-1768962210,f62cc6e271e940541c8cd140064b7a73:-1928124520,5e5bc6a208e94054838b79d503af120d:-1694028662,ae3b4a6285e94054aa323f6d1a051c68:-112041074,e22a4aee7ea9405464282c9b229a81fe:-139118388,d1b94eaeb2a94054b6d0484416509b3e:984717391,5309ce6e5fa940547a0f371fbeac37f4:-1557165675,58d8ca6e41a94054cd0cc319b2ec9890:1639537565,4b7402e67ea9405462617595189de381:-833928161,0524c626dea9405475ced70da6ec8541:690483380,e26306e21aa9405453a0ca1560248f80:-833928161,33038ea22ea940540eeeabc4421e8269:133624071,a9e20ea2f3a94054c882d65a6ffeb773:-1522999057,e5f002eec4694054e51fddb332d556f3:-1542433285,d1c9b5e2c2694054d8df4ff0b60d1dca:245269492,3fa975e25f6940548b4f6a5cbc11d5a7:-1374733826,59a971e21469405430ab187db312121a:1460229950,b2e839627f69405460f571882a56c7cf:110054236,a5d83562fd69405450e019cd4ffd7a0b:1494991390,61f6716e46294054463421c536b9ef78:-311071214,e9e5bd2ab2294054da4f82c7bd455aa5:-981969538,ab09e962e4e540548a740d96392853c6:599291767,8cb19daab8254054a53df3d7b6704724:1370563181,88f0992a4f254054b00d938a4ff95369:-27252925,40138dea6ea140547539bacc71414ac0:-191965024,14c205eae9a14054b16588578f059bc6:-1484541731,94514d2a39a1405421ba228624da2493:-191965024,a9010d2ac2a14054e0829e7807936a53:1559939060,266ff466bba1405432078df70e7c4721:-255072920,c3be3066fea14054d86e2d86f8902dc6:670179920,e6ae78269fa14054f3a0f3ce4f7fe8dc:331977250,6c32f70a0aed8c14f2360eaf82ea6307:-974340691,03b1fbc69ded8c142bcca74d9e859595:670179920,bef0f3868ded8c141fda61673c6cfc64:331977250,cf2debce6fad8c14ab066c6f7b4d983b:507237972,f0acaf8e81ad8c1482ebcedc8893b32f:-1974232160,ca7c2b8ea1ad8c1453992f02b7575255:-1059412346</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-16 15:38:11</sys_created_on>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>93782c6b88e847dd9a9559df8997fb01</sys_id>
+        <sys_metadata>cc5ce78edbad8c14e1ff9258db961912</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Services v2</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_cc5ce78edbad8c14e1ff9258db961912</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_cc5ce78edbad8c14e1ff9258db961912">b39c9805db3184103b4a90b6db9619d9</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-16 15:38:11</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

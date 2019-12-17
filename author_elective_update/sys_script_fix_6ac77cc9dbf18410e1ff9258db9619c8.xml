@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_fix">
+    <sys_script_fix action="DELETE">
+        <active>true</active>
+        <before>false</before>
+        <description>findAnywhere</description>
+        <flush_cache>false</flush_cache>
+        <name>findAnywhere</name>
+        <record_for_rollback>false</record_for_rollback>
+        <run_once>true</run_once>
+        <script><![CDATA[findSysID('5f8cf86bdbdc760046ee5411cf961982');
+
+function findSysID(id) {
+    var gr = new GlideRecord('sys_db_object');
+    gr.addEncodedQuery('super_class=NULL^nameNOT LIKEts_c_^nameNOT LIKEsysx_^nameNOT LIKEv_');
+    gr.query();
+    var searchTable, name;
+    while (gr.next()) {
+        name = gr.name + '';
+        searchTable = new GlideRecord(name);
+        if (searchTable.isValid()) {
+            searchTable.addQuery('sys_id', id);
+            searchTable.queryNoDomain();
+            searchTable.setLimit(1);
+            searchTable.query();
+            if (searchTable.hasNext()) {
+                gs.print('Found on table: ' + name);
+            }
+        }
+    }
+}]]></script>
+        <sys_class_name>sys_script_fix</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-16 17:26:11</sys_created_on>
+        <sys_id>6ac77cc9dbf18410e1ff9258db9619c8</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>findAnywhere</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_script_fix_6ac77cc9dbf18410e1ff9258db9619c8</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-16 17:34:10</sys_updated_on>
+        <unloadable>false</unloadable>
+    </sys_script_fix>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
+        <instance_name>newyorkdemo01</instance_name>
+        <name>sys_script_fix_6ac77cc9dbf18410e1ff9258db9619c8</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_fix"&gt;&lt;sys_script_fix action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;before&gt;false&lt;/before&gt;&lt;description&gt;findAnywhere&lt;/description&gt;&lt;flush_cache&gt;false&lt;/flush_cache&gt;&lt;name&gt;findAnywhere&lt;/name&gt;&lt;record_for_rollback&gt;false&lt;/record_for_rollback&gt;&lt;run_once&gt;true&lt;/run_once&gt;&lt;script&gt;&lt;![CDATA[findSysID('5f8cf86bdbdc760046ee5411cf961982');
+
+function findSysID(id) {
+    var gr = new GlideRecord('sys_db_object');
+    gr.addEncodedQuery('super_class=NULL^nameNOT LIKEts_c_^nameNOT LIKEsysx_^nameNOT LIKEv_');
+    gr.query();
+    var searchTable, name;
+    while (gr.next()) {
+        name = gr.name + '';
+        searchTable = new GlideRecord(name);
+        if (searchTable.isValid()) {
+            searchTable.addQuery('sys_id', id);
+            searchTable.queryNoDomain();
+            searchTable.setLimit(1);
+            searchTable.query();
+            if (searchTable.hasNext()) {
+                gs.print('Found on table: ' + name);
+            }
+        }
+    }
+}]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_fix&lt;/sys_class_name&gt;&lt;sys_created_by&gt;aangelo&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2019-12-16 17:26:11&lt;/sys_created_on&gt;&lt;sys_id&gt;6ac77cc9dbf18410e1ff9258db9619c8&lt;/sys_id&gt;&lt;sys_mod_count&gt;2&lt;/sys_mod_count&gt;&lt;sys_name&gt;findAnywhere&lt;/sys_name&gt;&lt;sys_package display_value="labs_atlas" source="x_snc_labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_fix_6ac77cc9dbf18410e1ff9258db9619c8&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;aangelo&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2019-12-16 17:34:10&lt;/sys_updated_on&gt;&lt;unloadable&gt;false&lt;/unloadable&gt;&lt;/sys_script_fix&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1643971088</payload_hash>
+        <record_name>findAnywhere</record_name>
+        <reverted_from/>
+        <source>e950983edb0508143b4a90b6db9619fe</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-16 17:34:10</sys_created_on>
+        <sys_id>1aa934cddbf18410e1ff9258db96196b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16f0fc6485e0000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-16 17:34:10</sys_updated_on>
+        <type>Fix Script</type>
+        <update_guid>5ea934cdb1f184106b3b4b0315d0f76a</update_guid>
+        <update_guid_history>5ea934cdb1f184106b3b4b0315d0f76a:1643971088,9d08340d53f1841054d7f636e0237f1f:1770447535,d9d73cc970f18410c9d73817ed2c5769:721985743</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-16 17:35:22</sys_created_on>
+        <sys_db_object display_value="" name="sys_script_fix">sys_script_fix</sys_db_object>
+        <sys_id>234d8a34b3904689ba2b0051fddd5f81</sys_id>
+        <sys_metadata>6ac77cc9dbf18410e1ff9258db9619c8</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>findAnywhere</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_script_fix_6ac77cc9dbf18410e1ff9258db9619c8</sys_update_name>
+        <sys_update_version display_value="sys_script_fix_6ac77cc9dbf18410e1ff9258db9619c8">1aa934cddbf18410e1ff9258db96196b</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-16 17:35:22</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

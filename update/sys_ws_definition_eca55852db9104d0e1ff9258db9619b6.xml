@@ -4,10 +4,10 @@
         <base_uri>/api/x_snc_labs_atlas/create</base_uri>
         <consumes>application/json,application/xml,text/xml</consumes>
         <consumes_customized>false</consumes_customized>
-        <default_version>No active default version</default_version>
+        <default_version>v1</default_version>
         <doc_link/>
         <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
-        <is_versioned>false</is_versioned>
+        <is_versioned>true</is_versioned>
         <name>NOW CLI API Create Event</name>
         <namespace>x_snc_labs_atlas</namespace>
         <produces>application/json,application/xml,text/xml</produces>
@@ -18,13 +18,13 @@
         <sys_created_by>ewilliams</sys_created_by>
         <sys_created_on>2019-11-25 15:38:20</sys_created_on>
         <sys_id>eca55852db9104d0e1ff9258db9619b6</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>4</sys_mod_count>
         <sys_name>NOW CLI API Create Event</sys_name>
         <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_ws_definition_eca55852db9104d0e1ff9258db9619b6</sys_update_name>
         <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2019-12-02 21:43:41</sys_updated_on>
+        <sys_updated_on>2019-12-17 16:58:00</sys_updated_on>
     </sys_ws_definition>
 </record_update>
