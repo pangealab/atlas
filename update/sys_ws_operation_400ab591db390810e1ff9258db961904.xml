@@ -10,9 +10,8 @@
         <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 
     // Constants
-	var SERVICES = "cmdb_ci_service_discovered";
+    var SERVICES = "cmdb_ci_service_discovered";
     var ENDPOINTS = "cmdb_ci_endpoint_http";
-    var ENTRYPOINTS = "sa_m2m_service_entry_point";
     var COMMENTS = "Added by NOW CLI";
 
     // Input / Output
@@ -23,6 +22,17 @@
     businessServiceName = requestData.name;
     businessServiceComments = requestData.comments;
 
+    // Input Variables
+    services = requestData.services;
+    relationships = requestData.relationships;
+
+    // Global Variables
+    var serviceIDs = {};
+    var endpointIDs = {};
+    var createCIsResult = {};
+    var createRelsResult = {};
+    var createEndpointsResult = {};
+
     /********************************************************************************/
     /***                                Create CI's                               ***/
     /********************************************************************************/
@@ -30,35 +40,34 @@
     try {
 
         // Transform 1 - Items
-        services1 = requestData.services;
-        items1 = [];
-        for (var i = 0; i < services1.length; i++) {
-            service1 = services1[i];
+        serviceItems = [];
+        for (var i = 0; i < services.length; i++) {
+            service = services[i];
             // Set Item
             item1 = {
                 "className": SERVICES,
                 "values": {
-                    "name": service1.name,
+                    "name": service.name,
                     "sys_class_name": SERVICES,
                     "comments": COMMENTS
                 }
             };
-            items1.push(item1);
+            serviceItems.push(item1);
         }
 
-        // Set Payload 1
-        payload1 = {
-            items: items1
+        // Set Payload
+        createCIsPayload = {
+            items: serviceItems
         };
         
         // DEBUG
-        log("Payload 1: " + JSON.stringify(payload1));
+        log("Create CIs Payload: " + JSON.stringify(createCIsPayload));
 
-        // Call IES with Payload 1
-        result1 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload1)));
+        // Call IES with Payload
+        createCIsResult = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(createCIsPayload)));
         
         // DEBUG
-        log("Result 1: " + JSON.stringify(result1));
+        log("Create CIs Result: " + JSON.stringify(createCIsResult));
 
     } catch (e) {
         error(e.message);
@@ -70,45 +79,43 @@
 
     try {
         
-        // Create Services Lookup
-        items2 = result1.items;
-        var index1 = {};
-        for (var j = 0; j < services1.length; j++) {
-            index1[services1[j].name] = items2[j].sysId;
+        // Create Services Lookups
+        createdCIsItems = createCIsResult.items;
+        for (var j = 0; j < services.length; j++) {
+            serviceIDs[services[j].name] = createdCIsItems[j].sysId;
         }
         
         // Transform 2 - Service Relations
-        relationships1 = requestData.relationships;
-        service_relations1 = [];
-        for (var k = 0; k < relationships1.length; k++) {
-            relationship1 = relationships1[k];
+        serviceRelations = [];
+        for (var k = 0; k < relationships.length; k++) {
+            relationship = relationships[k];
             // Test for nulls
-            parent = relationship1.parent === null ? parent = null : parent = index1[relationship1.parent];
-            child = relationship1.child === null ? child = null : child = index1[relationship1.child];
+            parent = relationship.parent === null ? parent = null : parent = serviceIDs[relationship.parent];
+            child = relationship.child === null ? child = null : child = serviceIDs[relationship.child];
             // Set Service Relation
-            service_relation1 = {
+            serviceRelation = {
                 "parent": parent,
                 "child": child
             };
-            service_relations1.push(service_relation1);
+            serviceRelations.push(serviceRelation);
         }   
 
-        // Set Payload 2
-        payload2 = {
+        // Set Payload
+        createRelsPayload = {
             "name": businessServiceName,
             "comments": businessServiceComments,
-            "service_relations": service_relations1
+            "service_relations": serviceRelations
         };
         
         // DEBUG
-        log("Payload 2: " + JSON.stringify(payload2));
+        log("Create Rels Payload: " + JSON.stringify(createRelsPayload));
         
-        // Call CIS with Payload 2
+        // Call CIS with Payload
         var createOrUpdateServiceHandler = new global.CreateOrUpdateITService();
-        var result2 =  createOrUpdateServiceHandler.processJSON(JSON.stringify(payload2));
+        createRelsResult =  createOrUpdateServiceHandler.processJSON(JSON.stringify(createRelsPayload));
         
         // DEBUG
-        log("Result 2: " + JSON.stringify(result2));
+        log("Create Rels Result: " + JSON.stringify(createRelsResult));
     
     } catch (e) {
         error(e.message);
@@ -121,75 +128,57 @@
     try {
 
         // Transform 3 - Endpoints
-        services2 = requestData.services;
-        items3 = [];
-        for (var l = 0; l < services2.length; l++) {
-            service2 = services2[l];
-            var url1 = null;
-            // URL Cleansing
-            if (service2.protocol=="http" && service2.port=="80") {
-                url1 = service2.protocol+"://"+service2.hostname;
-            } else if (service2.protocol=="https" && service2.port=="443") {
-                url1 = service2.protocol+"://"+service2.hostname;
-            } else {
-                url1 = service2.protocol+"://"+service2.hostname+":"+service2.port;
-            }
-            if (service2.path !== null) {
-                url1 = url1 + service2.path;
-            }
+        endpointItems = [];
+        for (var l = 0; l < services.length; l++) {
+            service = services[l];
+            // Parse URI
+            uri = parseUri(service.uri);
+            // Set Port Number if not specifiend for normal protocols
+            uriPort = (uri.protocol == 'http' && uri.port === '') ? uriPort = '80' : (uri.protocol == 'https' && uri.port === '') ? uriPort = '443' : uriPort = uri.port;
             // Set Item
-            item2 = {
+            endpointItem = {
                 "className": ENDPOINTS,
                 "values": {
-                    "name": url1,
-                    "url": url1,
-                    "host_name": service2.hostname,
-                    "host": service2.host,
+                    "name": uri.source,
+                    "url": uri.source,
+                    "host_name": uri.host,
+                    "host": uri.host,
                     "sys_class_name": ENDPOINTS,
                     "sys_class_path": "/!!/!$/#J",
-                    "protocol": service2.protocol,
-                    "port": service2.port,
+                    "protocol": uri.protocol,
+                    "port": uriPort,
                     "comments": COMMENTS
                 }
             };
-            items3.push(item2);
+            endpointItems.push(endpointItem);
         }
 
-        // Set Payload 3
-        payload3 = {
-            items: items3
+        // Set Payload
+        createEndpointsPayload = {
+            items: endpointItems
         };
 
         // DEBUG
-        log("Payload 3: " + JSON.stringify(payload3));
+        log("Create Endpoints Payload: " + JSON.stringify(createEndpointsPayload));
 
-        // Call IES with Payload 3
-        result3 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload3)));
+        // Call IES with Payload
+        createEndpointsResult = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(createEndpointsPayload)));
 
         // DEBUG
-        log("Result 3: " + JSON.stringify(result3));
+        log("Create Endpoints Result: " + JSON.stringify(createEndpointsResult));
 
         // Create Endpoints Lookup
-        items4 = result3.items;
-        var index2 = {};
-        for (var m = 0; m < services2.length; m++) {
-            index2[services2[m].name] = items4[m].sysId;
+        createdEndpointsItems = createEndpointsResult.items;
+        for (var m = 0; m < services.length; m++) {
+            endpointIDs[services[m].name] = createdEndpointsItems[m].sysId;
         }
         
         // DEBUG
-        log("Index1:" + JSON.stringify(index1));
+        log("endpointIDs:" + JSON.stringify(endpointIDs));
 
-        // DEBUG
-        log("Index2:" + JSON.stringify(index2));
-
-        for (var n = 0; n < services2.length; n++) {
-            var entryPoint = new GlideRecord(ENTRYPOINTS);
-            entryPoint.initialize();
-            entryPoint.cmdb_ci_service = index1[services2.name];
-            entryPoint.cmdb_ci_endpoint = index2[services2.name];
-            var entryPointId = entryPoint.insert();
-            log("EntryPointId:" + entryPointId);    
-        }        
+        // Add Manual Connections
+        var labsAtlas = new global.LabsAtlas();
+        labsAtlas.addManualConnection(services,serviceIDs,endpointIDs);
 
     } catch (e) {
         error(e.message);
@@ -198,11 +187,42 @@
     // Create Response
     responseData.code = '200';
 	responseData.type = "register_services";
-    responseData.message = "Services created in ServiceNow: " + services1.length;
+    responseData.message = "Services created in ServiceNow: " + services.length;
 
     return responseData;
 
 })(request, response);
+
+// Parse URI
+function parseUri(str) {
+
+    parseUri.options = {
+       strictMode: false,
+       key: ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
+       q: {
+          name: "queryKey",
+          parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+       },
+       parser: {
+          strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+          loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+       }
+    };
+ 
+    var o = parseUri.options,
+       m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+       uri = {},
+       i = 14;
+ 
+    while (i--) uri[o.key[i]] = m[i] || "";
+ 
+    uri[o.q.name] = {};
+    uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+       if ($1) uri[o.q.name][$1] = $2;
+    });
+ 
+    return uri;
+ };
 
 // Log INFO
 function log(message) {
@@ -231,14 +251,14 @@ function error(message) {
         <sys_created_by>aangelo</sys_created_by>
         <sys_created_on>2019-12-17 16:53:46</sys_created_on>
         <sys_id>400ab591db390810e1ff9258db961904</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>22</sys_mod_count>
         <sys_name>Services  (v2)</sys_name>
         <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_ws_operation_400ab591db390810e1ff9258db961904</sys_update_name>
         <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2019-12-17 16:55:52</sys_updated_on>
+        <sys_updated_on>2019-12-20 05:46:27</sys_updated_on>
         <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
         <web_service_version display_value="v2">c00ab591db390810e1ff9258db961901</web_service_version>
     </sys_ws_operation>

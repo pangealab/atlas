@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege">
+    <sys_scope_privilege action="INSERT_OR_UPDATE">
+        <operation>execute</operation>
+        <source_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</source_scope>
+        <status>allowed</status>
+        <sys_class_name>sys_scope_privilege</sys_class_name>
+        <sys_created_by>eric.williams@snc</sys_created_by>
+        <sys_created_on>2019-12-17 23:23:13</sys_created_on>
+        <sys_id>45235795dbf14810e1ff9258db96199b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>test2</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_scope_privilege_45235795dbf14810e1ff9258db96199b</sys_update_name>
+        <sys_updated_by>eric.williams@snc</sys_updated_by>
+        <sys_updated_on>2019-12-17 23:23:13</sys_updated_on>
+        <target_name>test2</target_name>
+        <target_scope display_value="Global">global</target_scope>
+        <target_type>sys_script_include</target_type>
+    </sys_scope_privilege>
+</record_update>

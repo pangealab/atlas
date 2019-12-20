@@ -114,87 +114,6 @@
         error(e.message);
     }
 
-    /********************************************************************************/
-    /***                             Create Endpoints                             ***/
-    /********************************************************************************/     
-
-    try {
-
-        // Transform 3 - Endpoints
-        services2 = requestData.services;
-        items3 = [];
-        for (var l = 0; l < services2.length; l++) {
-            service2 = services2[l];
-            var url1 = null;
-            // URL Cleansing
-            if (service2.protocol=="http" && service2.port=="80") {
-                url1 = service2.protocol+"://"+service2.hostname;
-            } else if (service2.protocol=="https" && service2.port=="443") {
-                url1 = service2.protocol+"://"+service2.hostname;
-            } else {
-                url1 = service2.protocol+"://"+service2.hostname+":"+service2.port;
-            }
-            if (service2.path !== null) {
-                url1 = url1 + service2.path;
-            }
-            // Set Item
-            item2 = {
-                "className": ENDPOINTS,
-                "values": {
-                    "name": url1,
-                    "url": url1,
-                    "host_name": service2.hostname,
-                    "host": service2.host,
-                    "sys_class_name": ENDPOINTS,
-                    "sys_class_path": "/!!/!$/#J",
-                    "protocol": service2.protocol,
-                    "port": service2.port,
-                    "comments": COMMENTS
-                }
-            };
-            items3.push(item2);
-        }
-
-        // Set Payload 3
-        payload3 = {
-            items: items3
-        };
-
-        // DEBUG
-        log("Payload 3: " + JSON.stringify(payload3));
-
-        // Call IES with Payload 3
-        result3 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload3)));
-
-        // DEBUG
-        log("Result 3: " + JSON.stringify(result3));
-
-        // Create Endpoints Lookup
-        items4 = result3.items;
-        var index2 = {};
-        for (var m = 0; m < services2.length; m++) {
-            index2[services2[m].name] = items4[m].sysId;
-        }
-        
-        // DEBUG
-        log("Index1:" + JSON.stringify(index1));
-
-        // DEBUG
-        log("Index2:" + JSON.stringify(index2));
-
-        for (var n = 0; n < services2.length; n++) {
-            var entryPoint = new GlideRecord(ENTRYPOINTS);
-            entryPoint.initialize();
-            entryPoint.cmdb_ci_service = index1[services2.name];
-            entryPoint.cmdb_ci_endpoint = index2[services2.name];
-            var entryPointId = entryPoint.insert();
-            log("EntryPointId:" + entryPointId);    
-        }        
-
-    } catch (e) {
-        error(e.message);
-    }
-
     // Create Response
     responseData.code = '200';
 	responseData.type = "register_services";
@@ -231,14 +150,14 @@ function error(message) {
         <sys_created_by>telery</sys_created_by>
         <sys_created_on>2019-11-19 17:35:39</sys_created_on>
         <sys_id>1955f5d0db9100103b4a90b6db96191f</sys_id>
-        <sys_mod_count>56</sys_mod_count>
+        <sys_mod_count>57</sys_mod_count>
         <sys_name>Services  (v1)</sys_name>
         <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_ws_operation_1955f5d0db9100103b4a90b6db96191f</sys_update_name>
         <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2019-12-17 16:56:51</sys_updated_on>
+        <sys_updated_on>2019-12-17 21:14:37</sys_updated_on>
         <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
         <web_service_version display_value="v1">5768b1dddbf50810e1ff9258db961947</web_service_version>
     </sys_ws_operation>
