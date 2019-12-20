@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_version">
+    <sys_ws_version action="DELETE">
+        <active>true</active>
+        <deprecated>false</deprecated>
+        <is_default>false</is_default>
+        <short_description/>
+        <sys_class_name>sys_ws_version</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-17 16:53:46</sys_created_on>
+        <sys_id>c00ab591db390810e1ff9258db961901</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>v2</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_version_c00ab591db390810e1ff9258db961901</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-17 16:53:46</sys_updated_on>
+        <version>2</version>
+        <version_id>v2</version_id>
+        <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
+    </sys_ws_version>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
+        <instance_name>newyorkdemo01</instance_name>
+        <name>sys_ws_version_c00ab591db390810e1ff9258db961901</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_version"><sys_ws_version action="INSERT_OR_UPDATE"><active>true</active><deprecated>false</deprecated><is_default>false</is_default><short_description/><sys_class_name>sys_ws_version</sys_class_name><sys_created_by>aangelo</sys_created_by><sys_created_on>2019-12-17 16:53:46</sys_created_on><sys_id>c00ab591db390810e1ff9258db961901</sys_id><sys_mod_count>0</sys_mod_count><sys_name>v2</sys_name><sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package><sys_policy/><sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope><sys_update_name>sys_ws_version_c00ab591db390810e1ff9258db961901</sys_update_name><sys_updated_by>aangelo</sys_updated_by><sys_updated_on>2019-12-17 16:53:46</sys_updated_on><version>2</version><version_id>v2</version_id><web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition></sys_ws_version></record_update>]]></payload>
+        <payload_hash>-2086345520</payload_hash>
+        <record_name>v2</record_name>
+        <reverted_from/>
+        <source>e950983edb0508143b4a90b6db9619fe</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-17 16:53:46</sys_created_on>
+        <sys_id>480ab591db390810e1ff9258db961903</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16f14c7a7fd0000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-17 16:53:46</sys_updated_on>
+        <type>Scripted REST Version</type>
+        <update_guid>400ab591123908104f95eb7144707003</update_guid>
+        <update_guid_history>400ab591123908104f95eb7144707003:-2086345520</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-20 21:13:22</sys_created_on>
+        <sys_db_object display_value="" name="sys_ws_version">sys_ws_version</sys_db_object>
+        <sys_id>6ead645480404cceaa4e1f9b26e3ad99</sys_id>
+        <sys_metadata>c00ab591db390810e1ff9258db961901</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>v2</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_ws_version_c00ab591db390810e1ff9258db961901</sys_update_name>
+        <sys_update_version display_value="sys_ws_version_c00ab591db390810e1ff9258db961901">480ab591db390810e1ff9258db961903</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-20 21:13:22</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

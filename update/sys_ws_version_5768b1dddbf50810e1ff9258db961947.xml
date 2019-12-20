@@ -18,6 +18,6 @@
         <sys_updated_on>2019-12-17 16:46:53</sys_updated_on>
         <version>1</version>
         <version_id>v1</version_id>
-        <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_definition display_value="NOW CLI API Register Services">2b576998db1100103b4a90b6db961977</web_service_definition>
     </sys_ws_version>
 </record_update>

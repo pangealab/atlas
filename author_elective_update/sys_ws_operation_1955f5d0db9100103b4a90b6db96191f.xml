@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json</consumes>
+        <consumes_customized>true</consumes_customized>
+        <default_operation_uri>/api/x_snc_labs_atlas/register/services</default_operation_uri>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Services  (v1)</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    // Constants
+	var SERVICES = "cmdb_ci_service_discovered";
+    var ENDPOINTS = "cmdb_ci_endpoint_http";
+    var ENTRYPOINTS = "sa_m2m_service_entry_point";
+    var COMMENTS = "Added by NOW CLI";
+
+    // Input / Output
+    var requestData = request.body.data;
+    var responseData = {};
+
+    // Capture Business Service Properties
+    businessServiceName = requestData.name;
+    businessServiceComments = requestData.comments;
+
+    /********************************************************************************/
+    /***                                Create CI's                               ***/
+    /********************************************************************************/
+
+    try {
+
+        // Transform 1 - Items
+        services1 = requestData.services;
+        items1 = [];
+        for (var i = 0; i < services1.length; i++) {
+            service1 = services1[i];
+            // Set Item
+            item1 = {
+                "className": SERVICES,
+                "values": {
+                    "name": service1.name,
+                    "sys_class_name": SERVICES,
+                    "comments": COMMENTS
+                }
+            };
+            items1.push(item1);
+        }
+
+        // Set Payload 1
+        payload1 = {
+            items: items1
+        };
+        
+        // DEBUG
+        log("Payload 1: " + JSON.stringify(payload1));
+
+        // Call IES with Payload 1
+        result1 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload1)));
+        
+        // DEBUG
+        log("Result 1: " + JSON.stringify(result1));
+
+    } catch (e) {
+        error(e.message);
+    }
+
+    /********************************************************************************/
+    /***                          Create Relationships                            ***/
+    /********************************************************************************/    
+
+    try {
+        
+        // Create Services Lookup
+        items2 = result1.items;
+        var index1 = {};
+        for (var j = 0; j < services1.length; j++) {
+            index1[services1[j].name] = items2[j].sysId;
+        }
+        
+        // Transform 2 - Service Relations
+        relationships1 = requestData.relationships;
+        service_relations1 = [];
+        for (var k = 0; k < relationships1.length; k++) {
+            relationship1 = relationships1[k];
+            // Test for nulls
+            parent = relationship1.parent === null ? parent = null : parent = index1[relationship1.parent];
+            child = relationship1.child === null ? child = null : child = index1[relationship1.child];
+            // Set Service Relation
+            service_relation1 = {
+                "parent": parent,
+                "child": child
+            };
+            service_relations1.push(service_relation1);
+        }   
+
+        // Set Payload 2
+        payload2 = {
+            "name": businessServiceName,
+            "comments": businessServiceComments,
+            "service_relations": service_relations1
+        };
+        
+        // DEBUG
+        log("Payload 2: " + JSON.stringify(payload2));
+        
+        // Call CIS with Payload 2
+        var createOrUpdateServiceHandler = new global.CreateOrUpdateITService();
+        var result2 =  createOrUpdateServiceHandler.processJSON(JSON.stringify(payload2));
+        
+        // DEBUG
+        log("Result 2: " + JSON.stringify(result2));
+    
+    } catch (e) {
+        error(e.message);
+    }
+
+    // Create Response
+    responseData.code = '200';
+	responseData.type = "register_services";
+    responseData.message = "Services created in ServiceNow: " + services1.length;
+
+    return responseData;
+
+})(request, response);
+
+// Log INFO
+function log(message) {
+    gs.info(message);
+}
+
+// Log ERROR
+function error(message) {
+    gs.error(message);
+}]]></operation_script>
+        <operation_uri>/api/x_snc_labs_atlas/v1/register/services</operation_uri>
+        <produces>application/json</produces>
+        <produces_customized>true</produces_customized>
+        <relative_path>/services</relative_path>
+        <request_example>[&#13;
+  {&#13;
+    "name": "string",&#13;
+    "host": "http://foo.com/api/v1/bar"&#13;
+  }&#13;
+]</request_example>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <requires_snc_internal_role>false</requires_snc_internal_role>
+        <short_description>Registers a list of Services with given input array</short_description>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 17:35:39</sys_created_on>
+        <sys_id>1955f5d0db9100103b4a90b6db96191f</sys_id>
+        <sys_mod_count>57</sys_mod_count>
+        <sys_name>Services  (v1)</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_operation_1955f5d0db9100103b4a90b6db96191f</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-17 21:14:37</sys_updated_on>
+        <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_version display_value="v1">5768b1dddbf50810e1ff9258db961947</web_service_version>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
+        <instance_name>newyorkdemo01</instance_name>
+        <name>sys_ws_operation_1955f5d0db9100103b4a90b6db96191f</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json&lt;/consumes&gt;&lt;consumes_customized&gt;true&lt;/consumes_customized&gt;&lt;default_operation_uri&gt;/api/x_snc_labs_atlas/register/services&lt;/default_operation_uri&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;POST&lt;/http_method&gt;&lt;name&gt;Services  (v1)&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    // Constants
+	var SERVICES = "cmdb_ci_service_discovered";
+    var ENDPOINTS = "cmdb_ci_endpoint_http";
+    var ENTRYPOINTS = "sa_m2m_service_entry_point";
+    var COMMENTS = "Added by NOW CLI";
+
+    // Input / Output
+    var requestData = request.body.data;
+    var responseData = {};
+
+    // Capture Business Service Properties
+    businessServiceName = requestData.name;
+    businessServiceComments = requestData.comments;
+
+    /********************************************************************************/
+    /***                                Create CI's                               ***/
+    /********************************************************************************/
+
+    try {
+
+        // Transform 1 - Items
+        services1 = requestData.services;
+        items1 = [];
+        for (var i = 0; i &lt; services1.length; i++) {
+            service1 = services1[i];
+            // Set Item
+            item1 = {
+                "className": SERVICES,
+                "values": {
+                    "name": service1.name,
+                    "sys_class_name": SERVICES,
+                    "comments": COMMENTS
+                }
+            };
+            items1.push(item1);
+        }
+
+        // Set Payload 1
+        payload1 = {
+            items: items1
+        };
+        
+        // DEBUG
+        log("Payload 1: " + JSON.stringify(payload1));
+
+        // Call IES with Payload 1
+        result1 = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(payload1)));
+        
+        // DEBUG
+        log("Result 1: " + JSON.stringify(result1));
+
+    } catch (e) {
+        error(e.message);
+    }
+
+    /********************************************************************************/
+    /***                          Create Relationships                            ***/
+    /********************************************************************************/    
+
+    try {
+        
+        // Create Services Lookup
+        items2 = result1.items;
+        var index1 = {};
+        for (var j = 0; j &lt; services1.length; j++) {
+            index1[services1[j].name] = items2[j].sysId;
+        }
+        
+        // Transform 2 - Service Relations
+        relationships1 = requestData.relationships;
+        service_relations1 = [];
+        for (var k = 0; k &lt; relationships1.length; k++) {
+            relationship1 = relationships1[k];
+            // Test for nulls
+            parent = relationship1.parent === null ? parent = null : parent = index1[relationship1.parent];
+            child = relationship1.child === null ? child = null : child = index1[relationship1.child];
+            // Set Service Relation
+            service_relation1 = {
+                "parent": parent,
+                "child": child
+            };
+            service_relations1.push(service_relation1);
+        }   
+
+        // Set Payload 2
+        payload2 = {
+            "name": businessServiceName,
+            "comments": businessServiceComments,
+            "service_relations": service_relations1
+        };
+        
+        // DEBUG
+        log("Payload 2: " + JSON.stringify(payload2));
+        
+        // Call CIS with Payload 2
+        var createOrUpdateServiceHandler = new global.CreateOrUpdateITService();
+        var result2 =  createOrUpdateServiceHandler.processJSON(JSON.stringify(payload2));
+        
+        // DEBUG
+        log("Result 2: " + JSON.stringify(result2));
+    
+    } catch (e) {
+        error(e.message);
+    }
+
+    // Create Response
+    responseData.code = '200';
+	responseData.type = "register_services";
+    responseData.message = "Services created in ServiceNow: " + services1.length;
+
+    return responseData;
+
+})(request, response);
+
+// Log INFO
+function log(message) {
+    gs.info(message);
+}
+
+// Log ERROR
+function error(message) {
+    gs.error(message);
+}]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_snc_labs_atlas/v1/register/services&lt;/operation_uri&gt;&lt;produces&gt;application/json&lt;/produces&gt;&lt;produces_customized&gt;true&lt;/produces_customized&gt;&lt;relative_path&gt;/services&lt;/relative_path&gt;&lt;request_example&gt;[&amp;#13;
+  {&amp;#13;
+    "name": "string",&amp;#13;
+    "host": "http://foo.com/api/v1/bar"&amp;#13;
+  }&amp;#13;
+]&lt;/request_example&gt;&lt;requires_acl_authorization&gt;false&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;true&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;false&lt;/requires_snc_internal_role&gt;&lt;short_description&gt;Registers a list of Services with given input array&lt;/short_description&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;telery&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2019-11-19 17:35:39&lt;/sys_created_on&gt;&lt;sys_id&gt;1955f5d0db9100103b4a90b6db96191f&lt;/sys_id&gt;&lt;sys_mod_count&gt;57&lt;/sys_mod_count&gt;&lt;sys_name&gt;Services  (v1)&lt;/sys_name&gt;&lt;sys_package display_value="labs_atlas" source="x_snc_labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_1955f5d0db9100103b4a90b6db96191f&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;aangelo&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2019-12-17 21:14:37&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="NOW CLI API Register Service"&gt;2b576998db1100103b4a90b6db961977&lt;/web_service_definition&gt;&lt;web_service_version display_value="v1"&gt;5768b1dddbf50810e1ff9258db961947&lt;/web_service_version&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1221514522</payload_hash>
+        <record_name>Services  (v1)</record_name>
+        <reverted_from/>
+        <source>e950983edb0508143b4a90b6db9619fe</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-17 21:14:38</sys_created_on>
+        <sys_id>0db53e19db3d08103b4a90b6db96192f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16f15b67a740000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-17 21:14:38</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>c1b53e19243d08105d475064a2ad972f</update_guid>
+        <update_guid_history>c1b53e19243d08105d475064a2ad972f:1221514522,15ba79d12e39081036bd047febd46708:638083313,336af1d180390810abfa4676421d0730:1147205357,70493151b6390810d217bd3aa3936db3:1173192273,eb68b9dd0ef508107c9da0f8eebc9ed4:317467383,b1ee87c18df1c410aa1daf0ad895c33a:-555907442,bacd8b0debb1c4102363b870e84838ee:1721849494,409c874d2fb1c41036d8084302dd529f:-72850416,c6c64f414cb1c41059b982437e3b2388:-1771641570,cc944f4189b1c410e2466ead6fd52882:2099322368,a4348b0d9c71c410ef087a520eb1ea6a:-89821104,35818b0db971c410dff2e097b7f74d62:1809397629,23a0c345fb71c410d7ce421539fa5731:-1358445217,f3aeba41df71c4108b4eb084e8240718:-1263207124,96cc7a050471c41005753afaa2b180e0:-356457004,ccbcfa01db71c4104009721750b295b4:-294382955,adfa76898a31c410e258c025f982c8ab:753942834,95677289e6fd841017c0975d22cf6c9f:1463558126,61946ec952bd841061923da3f1806fec:-1885516942,8844ea8989bd84108378154613dad524:-1495493391,fae322897bbd8410a4187ec9ac291798:1398356681,4493eec1a0bd84109c4602557ce8a34f:2033883381,0863a609eebd8410e9886152e600e762:-507657059,4203a60922bd8410d269bc995688f05e:2099801339,bb92a609e6bd84105f77fc2e449fa959:-1720816362,72df124156bd8410caa137d176d9fe4f:-326290069,443e9209c17d84109150ad151a17040f:-1443017922,285cd205887d84109f668182e5e50ee1:218553103,efa856c5047d8410a138d6772f9e5803:2087803975,a0f6d205397d84108c3fdd87523b9bd8:1677733114,cae65201527d8410554a6b43aec9b4cc:-399400531,397a8a8d86f98410442e107232cf5477:1396073282,4514cac1bef9841079839935aa1d25cd:-301965149,e65c35416eb9841085e92180c7265e53:1384449902,47e5f14170798410f4bfde1002e5299d:286579005,3fc8190de1758410e9e53e9d5e8e2d68:-734133907,a3bfd44503318410c3ce9ee0665e4169:-1704264221,d4eb2f4e06ad8c148d16a068c64bc7d8:1845569300,65846702d3ad8c14029ec7bacf7a50bd:728863604,53ddd2908bd500106e5381af294fddd9:-584324103,51a09654a45500108b3bd82960249f25:-1914539773,fbaf42148455001065b77c177d9b2158:1662081421,94ee0a900d550010921c6412f817870f:280915817,ea8e8a508f55001070a31517fffeaba1:-2106436166,855ec6504e5500101b0480123a7f290b:-1047123216,e60c4a1cbf150010208c6030fb7fe6f4:1465211824,9e1a4a58421500107e0d9d5be62991e2:-1151358757,da49c2d4d4150010ab46eb8fc07bafc6:-593768957,4de74a5475150010518c0fb2b8a90052:1362815915,245782146715001016c30a37f18b131e:-640120292,83168e5064150010b241bef812e2ac06:-1646518866,da0242d824d10010f445eff8a7608d74:182472146,555f3594e1d100106b0b08d125e4d7d9:-1812470478,3e6d3950e9d1001084b68da27f8fc58e:1803592299,1fcafd1c8a9100109481f426d378b819:-436669681,154ab9d8449100104d6966e86538950d:-1946044347,2767f5941a91001010602059c6160697:1405382694,3417b5941c9100108846361ee52538c2:-719056790</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-20 21:11:44</sys_created_on>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>1b8947ba76e4459c87bc40b94d0455b9</sys_id>
+        <sys_metadata>1955f5d0db9100103b4a90b6db96191f</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Services  (v1)</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_1955f5d0db9100103b4a90b6db96191f</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_1955f5d0db9100103b4a90b6db96191f">0db53e19db3d08103b4a90b6db96192f</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-20 21:11:44</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

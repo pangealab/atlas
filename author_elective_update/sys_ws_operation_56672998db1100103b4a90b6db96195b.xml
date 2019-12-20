@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json</consumes>
+        <consumes_customized>true</consumes_customized>
+        <default_operation_uri>/api/x_snc_labs_atlas/register/service</default_operation_uri>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Service (v1)</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	
+    var respData = {};
+	var childSysId = '';
+	var parentSysId = '';
+	
+	var createOrUpdateServiceHandler = new global.CreateOrUpdateITService ();
+	
+	var data = request.body.data;
+	
+	if (Object.keys(data).length == 0) {
+		gs.error('No request body found for register service');
+		return new sn_ws_err.BadRequestError('Empty request body');
+	} else {
+		gs.info("TIM --- data.body: " + data.body);
+		if (!data.name) {
+			gs.error('No service name provided for register service');
+			return new sn_ws_err.BadRequestError('Empty service name');
+		}
+		
+		//Implementing Dynatrace solution provided by BU and commenting out original script
+		
+		if (data.name) {
+			//Step 1. Create Business Service
+			var payload = "{ " + 
+			"\"name\": \"" + data.name + "\", " + 
+			"\"comments\": \"Business Service created by Grafana DevOps Demonstration\" " + 
+			"}" ; 
+			var result =  createOrUpdateServiceHandler.processJSON(payload); 
+			/*for(key in result) { 
+					gs.print(key + " " + result[key]); 
+				}*/
+			
+			//Step 2. Get Sys Id of newly created business service
+			target = new GlideRecord('cmdb_ci_service_discovered'); 
+			target.addQuery('name',data.name);
+			target.query();
+			while (target.next()) { 
+				childSysId = target.sys_id;
+			}
+		}
+
+		//Step 3. Create or update parent business service
+		if (data.parent) {
+			payload = "{ " + 
+			"\"name\": \"" + data.parent + "\", " + 
+			"\"comments\": \"\", " + 
+			"\"service_relations\": [ " + 
+			"{ \"parent\": \"\", " + 
+			"\"child\": \"" + childSysId + "\" " + 
+			"} " + 
+			"] " + 
+			"}" ;  
+			result =  createOrUpdateServiceHandler.processJSON(payload); 
+			/*for(key in result) { 
+					gs.print(key + " " + result[key]); 
+				}*/
+
+			//Get Sys Id of newly crerated parent business service
+			target = new GlideRecord('cmdb_ci_service_discovered');
+			target.addQuery('name',data.parent);
+			target.query();
+			while (target.next()) { 
+				parentSysId = target.sys_id;
+			}
+		}
+		
+		respData.code = '200';
+		respData.type = "register_service";
+		respData.message = "Service created";
+	}
+
+    return respData;
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_snc_labs_atlas/v1/register/service</operation_uri>
+        <produces>application/json</produces>
+        <produces_customized>true</produces_customized>
+        <relative_path>/service</relative_path>
+        <request_example>{&#13;
+  "name": "castor",&#13;
+  "parent": "Olympus"&#13;
+  "host": "http://foo.com/api/v1/castor"&#13;
+}</request_example>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <requires_snc_internal_role>false</requires_snc_internal_role>
+        <short_description>Register a Service</short_description>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>telery</sys_created_by>
+        <sys_created_on>2019-11-19 16:28:40</sys_created_on>
+        <sys_id>56672998db1100103b4a90b6db96195b</sys_id>
+        <sys_mod_count>37</sys_mod_count>
+        <sys_name>Service (v1)</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_operation_56672998db1100103b4a90b6db96195b</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-17 16:56:32</sys_updated_on>
+        <web_service_definition display_value="NOW CLI API Register Service">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_version display_value="v1">5768b1dddbf50810e1ff9258db961947</web_service_version>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
+        <instance_name>newyorkdemo01</instance_name>
+        <name>sys_ws_operation_56672998db1100103b4a90b6db96195b</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json&lt;/consumes&gt;&lt;consumes_customized&gt;true&lt;/consumes_customized&gt;&lt;default_operation_uri&gt;/api/x_snc_labs_atlas/register/service&lt;/default_operation_uri&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;POST&lt;/http_method&gt;&lt;name&gt;Service (v1)&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	
+    var respData = {};
+	var childSysId = '';
+	var parentSysId = '';
+	
+	var createOrUpdateServiceHandler = new global.CreateOrUpdateITService ();
+	
+	var data = request.body.data;
+	
+	if (Object.keys(data).length == 0) {
+		gs.error('No request body found for register service');
+		return new sn_ws_err.BadRequestError('Empty request body');
+	} else {
+		gs.info("TIM --- data.body: " + data.body);
+		if (!data.name) {
+			gs.error('No service name provided for register service');
+			return new sn_ws_err.BadRequestError('Empty service name');
+		}
+		
+		//Implementing Dynatrace solution provided by BU and commenting out original script
+		
+		if (data.name) {
+			//Step 1. Create Business Service
+			var payload = "{ " + 
+			"\"name\": \"" + data.name + "\", " + 
+			"\"comments\": \"Business Service created by Grafana DevOps Demonstration\" " + 
+			"}" ; 
+			var result =  createOrUpdateServiceHandler.processJSON(payload); 
+			/*for(key in result) { 
+					gs.print(key + " " + result[key]); 
+				}*/
+			
+			//Step 2. Get Sys Id of newly created business service
+			target = new GlideRecord('cmdb_ci_service_discovered'); 
+			target.addQuery('name',data.name);
+			target.query();
+			while (target.next()) { 
+				childSysId = target.sys_id;
+			}
+		}
+
+		//Step 3. Create or update parent business service
+		if (data.parent) {
+			payload = "{ " + 
+			"\"name\": \"" + data.parent + "\", " + 
+			"\"comments\": \"\", " + 
+			"\"service_relations\": [ " + 
+			"{ \"parent\": \"\", " + 
+			"\"child\": \"" + childSysId + "\" " + 
+			"} " + 
+			"] " + 
+			"}" ;  
+			result =  createOrUpdateServiceHandler.processJSON(payload); 
+			/*for(key in result) { 
+					gs.print(key + " " + result[key]); 
+				}*/
+
+			//Get Sys Id of newly crerated parent business service
+			target = new GlideRecord('cmdb_ci_service_discovered');
+			target.addQuery('name',data.parent);
+			target.query();
+			while (target.next()) { 
+				parentSysId = target.sys_id;
+			}
+		}
+		
+		respData.code = '200';
+		respData.type = "register_service";
+		respData.message = "Service created";
+	}
+
+    return respData;
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_snc_labs_atlas/v1/register/service&lt;/operation_uri&gt;&lt;produces&gt;application/json&lt;/produces&gt;&lt;produces_customized&gt;true&lt;/produces_customized&gt;&lt;relative_path&gt;/service&lt;/relative_path&gt;&lt;request_example&gt;{&amp;#13;
+  "name": "castor",&amp;#13;
+  "parent": "Olympus"&amp;#13;
+  "host": "http://foo.com/api/v1/castor"&amp;#13;
+}&lt;/request_example&gt;&lt;requires_acl_authorization&gt;false&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;true&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;false&lt;/requires_snc_internal_role&gt;&lt;short_description&gt;Register a Service&lt;/short_description&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;telery&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2019-11-19 16:28:40&lt;/sys_created_on&gt;&lt;sys_id&gt;56672998db1100103b4a90b6db96195b&lt;/sys_id&gt;&lt;sys_mod_count&gt;37&lt;/sys_mod_count&gt;&lt;sys_name&gt;Service (v1)&lt;/sys_name&gt;&lt;sys_package display_value="labs_atlas" source="x_snc_labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_56672998db1100103b4a90b6db96195b&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;aangelo&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2019-12-17 16:56:32&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="NOW CLI API Register Service"&gt;2b576998db1100103b4a90b6db961977&lt;/web_service_definition&gt;&lt;web_service_version display_value="v1"&gt;5768b1dddbf50810e1ff9258db961947&lt;/web_service_version&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-1774861075</payload_hash>
+        <record_name>Service (v1)</record_name>
+        <reverted_from/>
+        <source>e950983edb0508143b4a90b6db9619fe</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-17 16:56:32</sys_created_on>
+        <sys_id>24aa79d1db390810e1ff9258db961900</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16f14ca2e230000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-17 16:56:32</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>acaa39d175390810a3190a0464907476</update_guid>
+        <update_guid_history>acaa39d175390810a3190a0464907476:-1774861075,db1a3991723908103c2495e235f8fc9b:1160210801,6159f151b1390810c5f56dd407cfb75a:-1730450419,af68b9ddbff508102a4b01ebe07efbd6:-1634921491,15dbeb4ef9ad8c146b5665714e1a731c:799271809,7158a3c61fad8c14a0ad104c78fccfc6:965698267,5c74e702daad8c14d2255a706729a995:1090947109,13d61dfd11e184905db5700d5941a1da:637765397,1d7695fdc0e18490a550f4031ee322c2:-2022070995,dde1b964de2d4c504d89784d3bf0ad46:273323087,077da9acc5e94c5030fce3f521aecfda:468482986,6a71a6a688510050137ef50151b438b6:-167365223,b461ee2631510050ecee87be969ee6dd:947635649,4790ee267151005059cdb90a620bbe0d:1359561179,85402626c15100507c57ae0240e5472a:1308804557,eabe5e225d5100504ea5ea42c7e0f13e:-1775890442,c48d962e1411005075c0e9882897f2f9:-923864796,cdac5eaa01110050122c42e7315e80c7:-396199900,7eba52668b1100508e4425c7ceabe9f2:1905083709,d85ada26e1110050a3cbd9a4e118ae2a:355935444,7bcd929089d5001021c90e167b64221f:2093152813,0611d2947d5500101abd5d1e50855d2a:-721484189,eb9fced01c55001073ac1a64030b518b:-1947350800,bd7f0ad00b550010a8c3f99ae928027d:826398441,496f8a908a550010e0a7888715fe7bb0:-1648560356,e1de0a90455500101fe2065ccbb6c30a:989239536,db9e8e5017550010fd338738750648be:1798147678,393e825022550010d835ff7efcf6373f:-441478168,97dc069c3415001005239ea7fa8c1dfa:332548520,21fbb99cc89100103ca19a1cbc5c8ed5:-803841502,daeafd1c1d9100106912cc2edf46a639:-65237823,1c6a711c31910010f285d3f0a4b6bf34:822762631,fb7731d44b910010da94b4d3a1239dec:-1307424432,1d35b590869100108e6ffc87915be261:-1441954362,2eb2bd9cec510010d1a57474d6da52b0:-279789901,8b72f59c445100104f38a5b1b96fb8ca:-1155207531,ff51b5d83551001038840b3323157868:-1389797924,2fb725d8e81100100b68deebc63db426:684758923</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-20 21:11:02</sys_created_on>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>1ac9bdabe1f44e32839c535670323de9</sys_id>
+        <sys_metadata>56672998db1100103b4a90b6db96195b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Service (v1)</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_56672998db1100103b4a90b6db96195b</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_56672998db1100103b4a90b6db96195b">24aa79d1db390810e1ff9258db961900</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-20 21:11:02</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
