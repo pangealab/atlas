@@ -8,9 +8,16 @@
         <http_method>POST</http_method>
         <name>Event (v1)</name>
         <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
-
+	
+	// This scripted rest API receives events from Grafana and creates entries on the Event table
+	// For more information on the Grafana web hook used for Alert notifications see https://grafana.com/docs/grafana/latest/alerting/notifications/
+	//   Though Grafana can send multiple metric entries for each rule it does not include which metrics were originally violated when a rule clearing notification is sent.
+	//   For this reason we are only creating a single event per rule violation instead of unique events for each violated metric.
+	
+	// Grab the body of the request
     var requestBody = request.body.data;
 
+	// Did we have a Grafana event in the body?
     if (Object.keys(requestBody).length == 0) {
         response.setError(new sn_ws_err.BadRequestError('No event found'));
 		gs.warn("Grafana failed to create event: No event");
@@ -19,28 +26,53 @@
 
     var event = requestBody;
 
+	// Create a new GlideRecord pointing at the event table and prepare it for insert
     var event_GR = new GlideRecord('em_event');
     event_GR.initialize();
 
+	// Set the source to Grafana so we know where this event originated from
     event_GR.source = "Grafana";
 
+	// Events from Grafana will be bound to CIs on the Application Services table so we set the CI Type field accordingly
 	event_GR.ci_type = 'cmdb_ci_service_discovered';
+	
+	// We are using the name of the rule that was violated as the "Resource" in the event
     event_GR.resource = event.ruleName;
+	// We are using the rule identifer as the "Metric Name" in the event
     event_GR.metric_name = event.ruleId;
 	
+	// If this Grafana event is a rising event there should be "evalMatches" in the event so we are going to dig in and pluck out relevant parts of the first metric.
+	//   As previously mentioned we collapse all metric violations into a single ServiceNow event so we can properly clear alerts due to limitations with the Grafana notifications.
+	//   Due to this we only look at the first evalMatch in the Grafana event even if there are multiple entries.
 	if (event.evalMatches[0]){
+		// In order to properly bind the CI to the service CI we want to help tell event managment how to find the CI as the standard Node lookup wont work in our case
 		var id_attributes = {};
+		// The Grafana tag "app" contains the name of the service being monitored.  This must align with the name of an Application Service in ServiceNow
+		//     In this case we are setting up a filter to only bind to a CI where the "name" of the CI matches the "app" tag of the incoming Grafana event
 		id_attributes.name = event.evalMatches[0].tags.app;
+		//  To prevent matching other CIs in the system that have the same name we are telling event management that we only want to look at CIs directly in the Application Services table
 		id_attributes.sys_class_name = 'cmdb_ci_service_discovered';
+		// Now that we have defined how to find the proper CI we JSON encode the lookup and put it into the CI Identifier field on theevent
 		event_GR.ci_identifier = JSON.stringify(id_attributes);
+		
+		// We also use the "app" tag to set the Node value in the event so we are consistent
 		event_GR.node = event.evalMatches[0].tags.app;
 	}
 	
+	// If the incoming event contained a "message" field we use that to set our new event Description
 	if (event.message) { event_GR.description = event.message; }
+	// But if we dont have a "message" then we just use the ruleName as the Description
 	else { event_GR.description = event.ruleName; }
+	// The message key is used to deduplicate events into a single alert.  All incoming events with the same message key will be tied to a single alert in the Alert table so we need to make sure our 
+	//   message key is sufficiently unique to only combine alerts from the same service & rule, but not so unique multiple violations of the same rule on the same service dont create seperate alerts
+	//   We are using the combination of the "ruleUrl" and the "ruleId" to create a message key.
     event_GR.message_key = event.ruleUrl + "|" + event.ruleId;
+	
+	// We are defaulting the resolution state to "New" meaning this will be a "rising" event by default.  We will then check the event state to decide if we should actually make it a closing alert
     event_GR.resolution_state = "New";
 
+	// Set the event Severity to Major if Grafana is "alerting".  If the Grafana Severity is "ok" we set the event to clear and the Resolution State to "Closing" so we clear the associated Alert.
+	//  Any other Grafana state goes to Minor.
     switch (event.state) {
         case 'alerting':
             event_GR.severity = 2;
@@ -53,8 +85,10 @@
             event_GR.severity = 3;
     }
 
+	// We are going to put the entire Grafana event into the Additional Info field as JSON so we can optionally use any other event info downstream in event rules etc.
     event_GR.additional_info = JSON.stringify(event);
 
+	// We are done with the initial event parsing so we are inserting the event and standard Event Managment processing takes over from here!
     event_GR.insert();
 
 	return "Event created with sys_id " + event_GR.sys_id;
@@ -74,14 +108,14 @@
         <sys_created_by>ewilliams</sys_created_by>
         <sys_created_on>2019-11-25 15:39:49</sys_created_on>
         <sys_id>4ce59092db9104d0e1ff9258db96199c</sys_id>
-        <sys_mod_count>25</sys_mod_count>
+        <sys_mod_count>26</sys_mod_count>
         <sys_name>Event (v1)</sys_name>
         <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_ws_operation_4ce59092db9104d0e1ff9258db96199c</sys_update_name>
-        <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2019-12-20 04:29:08</sys_updated_on>
+        <sys_updated_by>ewilliams</sys_updated_by>
+        <sys_updated_on>2020-01-08 14:59:45</sys_updated_on>
         <web_service_definition display_value="NOW CLI API Create Event">eca55852db9104d0e1ff9258db9619b6</web_service_definition>
         <web_service_version display_value="v1">4efaf115db390810e1ff9258db961967</web_service_version>
     </sys_ws_operation>
