@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_hub_flow">
+    <sys_hub_flow action="DELETE">
+        <access>public</access>
+        <acls/>
+        <active>false</active>
+        <annotation>Create Incident from Alert</annotation>
+        <callable_by_client_api>false</callable_by_client_api>
+        <category/>
+        <compiler_build/>
+        <copied_from/>
+        <copied_from_name/>
+        <description>Create Incident from Alert</description>
+        <internal_name>create_incident_from_alert</internal_name>
+        <label_cache>[]</label_cache>
+        <latest_snapshot/>
+        <master_snapshot/>
+        <name>Create Incident from Alert</name>
+        <natlang/>
+        <outputs/>
+        <remote_trigger_id/>
+        <run_as>system</run_as>
+        <sc_callable>false</sc_callable>
+        <show_draft_actions>false</show_draft_actions>
+        <show_triggered_flows>false</show_triggered_flows>
+        <status>draft</status>
+        <sys_class_name>sys_hub_flow</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 20:11:14</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>8e758ac8db91905016bfa8fc139619da</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Create Incident from Alert</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_hub_flow_8e758ac8db91905016bfa8fc139619da</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 20:11:14</sys_updated_on>
+        <type>subflow</type>
+    </sys_hub_flow>
+    <sys_translated_text action="DELETE" query="documentkey=8e758ac8db91905016bfa8fc139619da"/>
+    <sys_variable_value action="DELETE" query="document_key=8e758ac8db91905016bfa8fc139619da"/>
+    <sys_flow_cat_variable_model action="DELETE" query="id=8e758ac8db91905016bfa8fc139619da^sys_idNOT IN0a758ac8db91905016bfa8fc139619dd"/>
+    <sys_flow_cat_variable_model action="DELETE">
+        <id>8e758ac8db91905016bfa8fc139619da</id>
+        <name>Create Incident from Alert</name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 20:11:14</sys_created_on>
+        <sys_id>0a758ac8db91905016bfa8fc139619dd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_scope/>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 20:11:14</sys_updated_on>
+    </sys_flow_cat_variable_model>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>ff4233fcdb43089449eac59705961952</instance_id>
+        <instance_name>orlandodemo01</instance_name>
+        <name>sys_hub_flow_8e758ac8db91905016bfa8fc139619da</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_hub_flow"><sys_hub_flow action="INSERT_OR_UPDATE"><access>public</access><acls/><active>false</active><annotation>Create Incident from Alert</annotation><callable_by_client_api>false</callable_by_client_api><category/><compiler_build/><copied_from/><copied_from_name/><description>Create Incident from Alert</description><internal_name>create_incident_from_alert</internal_name><label_cache>[]</label_cache><latest_snapshot/><master_snapshot/><name>Create Incident from Alert</name><natlang/><outputs/><remote_trigger_id/><run_as>system</run_as><sc_callable>false</sc_callable><show_draft_actions>false</show_draft_actions><show_triggered_flows>false</show_triggered_flows><status>draft</status><sys_class_name>sys_hub_flow</sys_class_name><sys_created_by>aangelo</sys_created_by><sys_created_on>2020-06-04 20:11:14</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>8e758ac8db91905016bfa8fc139619da</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Create Incident from Alert</sys_name><sys_overrides/><sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package><sys_policy/><sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope><sys_update_name>sys_hub_flow_8e758ac8db91905016bfa8fc139619da</sys_update_name><sys_updated_by>aangelo</sys_updated_by><sys_updated_on>2020-06-04 20:11:14</sys_updated_on><type>subflow</type></sys_hub_flow><sys_translated_text action="delete_multiple" query="documentkey=8e758ac8db91905016bfa8fc139619da"/><sys_variable_value action="delete_multiple" query="document_key=8e758ac8db91905016bfa8fc139619da"/><sys_flow_cat_variable_model action="delete_multiple" query="id=8e758ac8db91905016bfa8fc139619da^sys_idNOT IN0a758ac8db91905016bfa8fc139619dd"/><sys_flow_cat_variable_model action="INSERT_OR_UPDATE"><id>8e758ac8db91905016bfa8fc139619da</id><name>Create Incident from Alert</name><sys_created_by>aangelo</sys_created_by><sys_created_on>2020-06-04 20:11:14</sys_created_on><sys_id>0a758ac8db91905016bfa8fc139619dd</sys_id><sys_mod_count>0</sys_mod_count><sys_scope/><sys_updated_by>aangelo</sys_updated_by><sys_updated_on>2020-06-04 20:11:14</sys_updated_on></sys_flow_cat_variable_model></record_update>]]></payload>
+        <payload_hash>32445260</payload_hash>
+        <record_name>Create Incident from Alert</record_name>
+        <reverted_from/>
+        <source>4c14ce48db91905016bfa8fc13961994</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 20:11:14</sys_created_on>
+        <sys_id>d275cec8db91905016bfa8fc13961966</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17280f589cc0000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 20:11:14</sys_updated_on>
+        <type>Flow</type>
+        <update_guid>da75cec8ce9190503346efe5785f6365</update_guid>
+        <update_guid_history>da75cec8ce9190503346efe5785f6365:32445260</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 20:16:34</sys_created_on>
+        <sys_db_object display_value="" name="sys_hub_flow">sys_hub_flow</sys_db_object>
+        <sys_id>c773499bd5eb499ca62b4c4ba87d25e4</sys_id>
+        <sys_metadata>8e758ac8db91905016bfa8fc139619da</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Create Incident from Alert</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_hub_flow_8e758ac8db91905016bfa8fc139619da</sys_update_name>
+        <sys_update_version display_value="sys_hub_flow_8e758ac8db91905016bfa8fc139619da">d275cec8db91905016bfa8fc13961966</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 20:16:34</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
