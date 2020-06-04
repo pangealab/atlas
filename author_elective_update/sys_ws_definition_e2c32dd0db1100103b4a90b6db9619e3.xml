@@ -29,7 +29,7 @@
     </sys_ws_definition>
     <sys_update_version action="INSERT_OR_UPDATE">
         <action>DELETE</action>
-        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <application display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</application>
         <file_path/>
         <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
         <instance_name>newyorkdemo01</instance_name>
@@ -62,10 +62,10 @@
         <sys_metadata>e2c32dd0db1100103b4a90b6db9619e3</sys_metadata>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>service</sys_name>
-        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_parent/>
         <sys_policy/>
-        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
         <sys_update_name>sys_ws_definition_e2c32dd0db1100103b4a90b6db9619e3</sys_update_name>
         <sys_update_version display_value="sys_ws_definition_e2c32dd0db1100103b4a90b6db9619e3">c064add0db1100103b4a90b6db961992</sys_update_version>

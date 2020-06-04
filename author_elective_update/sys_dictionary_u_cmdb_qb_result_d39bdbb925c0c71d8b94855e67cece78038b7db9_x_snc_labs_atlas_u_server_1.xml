@@ -70,7 +70,7 @@
     </sys_dictionary>
     <sys_update_version action="INSERT_OR_UPDATE">
         <action>DELETE</action>
-        <application display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <application display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</application>
         <file_path/>
         <instance_id>d70246cbdb948c90b847ac44d4961935</instance_id>
         <instance_name>newyorkdemo01</instance_name>
@@ -103,10 +103,10 @@
         <sys_metadata>1a90903adb698054e1ff9258db961902</sys_metadata>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Server 1</sys_name>
-        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_parent/>
         <sys_policy/>
-        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
         <sys_update_name>sys_dictionary_u_cmdb_qb_result_d39bdbb925c0c71d8b94855e67cece78038b7db9_x_snc_labs_atlas_u_server_1</sys_update_name>
         <sys_update_version display_value="sys_dictionary_u_cmdb_qb_result_d39bdbb925c0c71d8b94855e67cece78038b7db9_x_snc_labs_atlas_u_server_1">9a90903adb698054e1ff9258db961954</sys_update_version>

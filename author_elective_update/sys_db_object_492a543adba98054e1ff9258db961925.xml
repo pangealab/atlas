@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_db_object">
+    <sys_db_object action="DELETE">
+        <access/>
+        <actions_access>true</actions_access>
+        <alter_access>true</alter_access>
+        <caller_access/>
+        <client_scripts_access>true</client_scripts_access>
+        <configuration_access>false</configuration_access>
+        <create_access>true</create_access>
+        <create_access_controls>false</create_access_controls>
+        <delete_access>false</delete_access>
+        <extension_model/>
+        <is_extendable>false</is_extendable>
+        <label>Kubernetes-Query Results</label>
+        <live_feed_enabled>false</live_feed_enabled>
+        <name>x_snc_labs_atlas_u_cmdb_qb_result_7940be32d26d8c59c7ec1d16e2ae7d286af994a6</name>
+        <number_ref/>
+        <provider_class/>
+        <read_access>true</read_access>
+        <scriptable_table>false</scriptable_table>
+        <super_class display_value="Query Builder Results" name="cmdb_qb_result_base">52090e07db500010e1ff9258db96193e</super_class>
+        <sys_class_code>!#</sys_class_code>
+        <sys_class_name>sys_db_object</sys_class_name>
+        <sys_class_path>/!#</sys_class_path>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-09 15:30:09</sys_created_on>
+        <sys_id>492a543adba98054e1ff9258db961925</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Labs Atlas U CMDB Qb Result 7940be32d26d8c59c7ec1d16e2ae7d286af994a6</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_db_object_492a543adba98054e1ff9258db961925</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-09 15:30:09</sys_updated_on>
+        <update_access>true</update_access>
+        <user_role/>
+        <ws_access>true</ws_access>
+    </sys_db_object>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>ff4233fcdb43089449eac59705961952</instance_id>
+        <instance_name>orlandodemo01</instance_name>
+        <name>sys_db_object_492a543adba98054e1ff9258db961925</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_db_object">
+    <sys_db_object action="INSERT_OR_UPDATE">
+        <access/>
+        <actions_access>true</actions_access>
+        <alter_access>true</alter_access>
+        <caller_access/>
+        <client_scripts_access>true</client_scripts_access>
+        <configuration_access>false</configuration_access>
+        <create_access>true</create_access>
+        <create_access_controls>false</create_access_controls>
+        <delete_access>false</delete_access>
+        <extension_model/>
+        <is_extendable>false</is_extendable>
+        <label>Kubernetes-Query Results</label>
+        <live_feed_enabled>false</live_feed_enabled>
+        <name>x_snc_labs_atlas_u_cmdb_qb_result_7940be32d26d8c59c7ec1d16e2ae7d286af994a6</name>
+        <number_ref/>
+        <provider_class/>
+        <read_access>true</read_access>
+        <scriptable_table>false</scriptable_table>
+        <super_class display_value="Query Builder Results" name="cmdb_qb_result_base">52090e07db500010e1ff9258db96193e</super_class>
+        <sys_class_code>!#</sys_class_code>
+        <sys_class_name>sys_db_object</sys_class_name>
+        <sys_class_path>/!#</sys_class_path>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-09 15:30:09</sys_created_on>
+        <sys_id>492a543adba98054e1ff9258db961925</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Labs Atlas U CMDB Qb Result 7940be32d26d8c59c7ec1d16e2ae7d286af994a6</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_db_object_492a543adba98054e1ff9258db961925</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-09 15:30:09</sys_updated_on>
+        <update_access>true</update_access>
+        <user_role/>
+        <ws_access>true</ws_access>
+    </sys_db_object>
+</record_update>]]></payload>
+        <payload_hash>2080725443</payload_hash>
+        <record_name>Kubernetes-Query Results</record_name>
+        <reverted_from/>
+        <source/>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 19:29:14</sys_created_on>
+        <sys_id>3edbf500db91905016bfa8fc1396197d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17280cf14a60000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 19:29:14</sys_updated_on>
+        <type>Table</type>
+        <update_guid>fadbf500b691905024801aedd1fdcd7d</update_guid>
+        <update_guid_history>c95b3dcc47519050d972aa7b44a9bf26:1330595474,77bbc7f671b7c4108b1eec8e6f4c225c:2080725443</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 19:30:17</sys_created_on>
+        <sys_db_object display_value="" name="sys_db_object">sys_db_object</sys_db_object>
+        <sys_id>2d83894dcd6d43f48f137d022d939724</sys_id>
+        <sys_metadata>492a543adba98054e1ff9258db961925</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Labs Atlas U CMDB Qb Result 7940be32d26d8c59c7ec1d16e2ae7d286af994a6</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_db_object_492a543adba98054e1ff9258db961925</sys_update_name>
+        <sys_update_version display_value="sys_db_object_492a543adba98054e1ff9258db961925">3edbf500db91905016bfa8fc1396197d</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 19:30:17</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

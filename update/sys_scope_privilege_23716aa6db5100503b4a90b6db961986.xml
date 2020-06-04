@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege">
     <sys_scope_privilege action="INSERT_OR_UPDATE">
         <operation>read</operation>
-        <source_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</source_scope>
+        <source_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</source_scope>
         <status>allowed</status>
         <sys_class_name>sys_scope_privilege</sys_class_name>
         <sys_created_by>telery</sys_created_by>
@@ -9,9 +9,9 @@
         <sys_id>23716aa6db5100503b4a90b6db961986</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>cmdb_ci_service_discovered</sys_name>
-        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
-        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_scope_privilege_23716aa6db5100503b4a90b6db961986</sys_update_name>
         <sys_updated_by>telery</sys_updated_by>
         <sys_updated_on>2019-11-26 20:27:19</sys_updated_on>

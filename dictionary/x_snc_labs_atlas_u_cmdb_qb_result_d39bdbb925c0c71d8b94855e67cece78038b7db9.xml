@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><database>
-    <element extends="cmdb_qb_result_base" label="Kubernetes-Query Results" max_length="40" name="x_snc_labs_atlas_u_cmdb_qb_result_d39bdbb925c0c71d8b94855e67cece78038b7db9" type="collection"/>
-</database>

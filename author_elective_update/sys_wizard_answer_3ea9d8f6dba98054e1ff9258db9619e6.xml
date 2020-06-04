@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_wizard_answer">
+    <sys_wizard_answer action="DELETE">
+        <active>true</active>
+        <answer>New Kubernetes-Query Results</answer>
+        <button_label/>
+        <dependent_value/>
+        <element/>
+        <name>Kubernetes-Query Results</name>
+        <next_question/>
+        <order>100</order>
+        <payload_name/>
+        <question display_value="Query Builder Results" name="Query Builder Results">5a090e07db500010e1ff9258db96193f</question>
+        <roles/>
+        <script/>
+        <sys_class_name>sys_wizard_answer</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-09 15:28:05</sys_created_on>
+        <sys_id>3ea9d8f6dba98054e1ff9258db9619e6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Kubernetes-Query Results</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_wizard_answer_3ea9d8f6dba98054e1ff9258db9619e6</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-09 15:28:05</sys_updated_on>
+        <table/>
+        <target_url>x_snc_labs_atlas_u_cmdb_qb_result_d39bdbb925c0c71d8b94855e67cece78038b7db9.do</target_url>
+        <type>1</type>
+    </sys_wizard_answer>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>ff4233fcdb43089449eac59705961952</instance_id>
+        <instance_name>orlandodemo01</instance_name>
+        <name>sys_wizard_answer_3ea9d8f6dba98054e1ff9258db9619e6</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_wizard_answer">
+    <sys_wizard_answer action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <answer>New Kubernetes-Query Results</answer>
+        <button_label/>
+        <dependent_value/>
+        <element/>
+        <name>Kubernetes-Query Results</name>
+        <next_question/>
+        <order>100</order>
+        <payload_name/>
+        <question display_value="Query Builder Results" name="Query Builder Results">5a090e07db500010e1ff9258db96193f</question>
+        <roles/>
+        <script/>
+        <sys_class_name>sys_wizard_answer</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-09 15:28:05</sys_created_on>
+        <sys_id>3ea9d8f6dba98054e1ff9258db9619e6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Kubernetes-Query Results</sys_name>
+        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_wizard_answer_3ea9d8f6dba98054e1ff9258db9619e6</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-09 15:28:05</sys_updated_on>
+        <table/>
+        <target_url>x_snc_labs_atlas_u_cmdb_qb_result_d39bdbb925c0c71d8b94855e67cece78038b7db9.do</target_url>
+        <type>1</type>
+    </sys_wizard_answer>
+</record_update>]]></payload>
+        <payload_hash>-689626956</payload_hash>
+        <record_name>Kubernetes-Query Results</record_name>
+        <reverted_from/>
+        <source>5fdbf500db91905016bfa8fc139619ea</source>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 19:29:17</sys_created_on>
+        <sys_id>2bdb3900db91905016bfa8fc13961954</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17280cf1fe60000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 19:29:17</sys_updated_on>
+        <type>Answer</type>
+        <update_guid>a7db39002f9190507f7b9225c8f51954</update_guid>
+        <update_guid_history>a7db39002f9190507f7b9225c8f51954:0,e95b3dcc4d519050631e0dc543d597ec:1532971001,20cb0bf6b1b7c4100a10115a14535432:-689626956</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2020-06-04 19:30:34</sys_created_on>
+        <sys_db_object display_value="" name="sys_wizard_answer">sys_wizard_answer</sys_db_object>
+        <sys_id>004401d9aeea4400a6531c903ce90000</sys_id>
+        <sys_metadata>3ea9d8f6dba98054e1ff9258db9619e6</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Kubernetes-Query Results</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent display_value="Query Builder Results">3e1a3f34db430010c8555268dc96199c</sys_parent>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_wizard_answer_3ea9d8f6dba98054e1ff9258db9619e6</sys_update_name>
+        <sys_update_version display_value="sys_wizard_answer_3ea9d8f6dba98054e1ff9258db9619e6">2bdb3900db91905016bfa8fc13961954</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2020-06-04 19:30:34</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

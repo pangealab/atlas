@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_package_dependency_m2m">
     <sys_package_dependency_m2m action="INSERT_OR_UPDATE">
-        <dependency display_value="Configuration Management (CMDB)" source="com.snc.cmdb">6b67c64bdb100010e1ff9258db961998</dependency>
+        <dependency display_value="Configuration Management (CMDB)" source="com.snc.cmdb">4928f778db030010c8555268dc9619d0</dependency>
         <min_version>1.1</min_version>
         <sys_created_by>aangelo</sys_created_by>
         <sys_created_on>2019-12-09 14:48:26</sys_created_on>
-        <sys_id>4a90503adb698054e1ff9258db9619f8</sys_id>
+        <sys_id>87dbf500db91905016bfa8fc139619cd</sys_id>
         <sys_mod_count>0</sys_mod_count>
-        <sys_package display_value="labs_atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_updated_by>aangelo</sys_updated_by>
         <sys_updated_on>2019-12-09 14:48:26</sys_updated_on>
     </sys_package_dependency_m2m>
