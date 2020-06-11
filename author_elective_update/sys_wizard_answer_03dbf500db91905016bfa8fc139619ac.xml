@@ -42,7 +42,7 @@
         <source>c724f020db2010103c02e22913961956</source>
         <source_table>sys_upgrade_history</source_table>
         <state>previous</state>
-        <sys_created_by/>
+        <sys_created_by>aangelo</sys_created_by>
         <sys_created_on>2020-04-29 20:45:55</sys_created_on>
         <sys_id>0b1c3140db91905016bfa8fc1396197b</sys_id>
         <sys_mod_count>0</sys_mod_count>
