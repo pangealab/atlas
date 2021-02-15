@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json</consumes>
+        <consumes_customized>true</consumes_customized>
+        <default_operation_uri>/api/x_snc_labs_atlas/register/services</default_operation_uri>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Services  (v1)</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    // Constants
+    var SERVICES = "cmdb_ci_service_discovered";
+    var ENDPOINTS = "cmdb_ci_endpoint_http";
+    var COMMENTS = "Added by NOW CLI";
+
+    // Input / Output
+    var requestData = request.body.data;
+    var responseData = {};
+
+    // Capture Business Service Properties
+    businessServiceName = requestData.name;
+    businessServiceComments = requestData.comments;
+
+    // Input Variables
+    services = requestData.services;
+    relationships = requestData.relationships;
+
+    // Global Variables
+    var serviceIDs = {};
+    var endpointIDs = {};
+    var createCIsResult = {};
+    var createRelsResult = {};
+    var createEndpointsResult = {};
+
+    /********************************************************************************/
+    /***                                Create CI's                               ***/
+    /********************************************************************************/
+
+    try {
+
+        // Transform 1 - Items
+        serviceItems = [];
+        for (var i = 0; i < services.length; i++) {
+            service = services[i];
+            // Set Item
+            item1 = {
+                "className": SERVICES,
+                "values": {
+                    "name": service.name,
+                    "sys_class_name": SERVICES,
+                    "comments": COMMENTS
+                }
+            };
+            serviceItems.push(item1);
+        }
+
+        // Set Payload
+        createCIsPayload = {
+            items: serviceItems
+        };
+        
+        // DEBUG
+        log("Create CIs Payload: " + JSON.stringify(createCIsPayload));
+
+        // Call IES with Payload
+        createCIsResult = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(createCIsPayload)));
+        
+        // DEBUG
+        log("Create CIs Result: " + JSON.stringify(createCIsResult));
+
+    } catch (e) {
+        error(e.message);
+    }
+
+    /********************************************************************************/
+    /***                          Create Relationships                            ***/
+    /********************************************************************************/    
+
+    try {
+        
+        // Create Services Lookups
+        createdCIsItems = createCIsResult.items;
+        for (var j = 0; j < services.length; j++) {
+            serviceIDs[services[j].name] = createdCIsItems[j].sysId;
+        }
+        
+        // Transform 2 - Service Relations
+        serviceRelations = [];
+        for (var k = 0; k < relationships.length; k++) {
+            relationship = relationships[k];
+            // Test for nulls
+            parent = relationship.parent === null ? parent = null : parent = serviceIDs[relationship.parent];
+            child = relationship.child === null ? child = null : child = serviceIDs[relationship.child];
+            // Set Service Relation
+            serviceRelation = {
+                "parent": parent,
+                "child": child
+            };
+            serviceRelations.push(serviceRelation);
+        }   
+
+        // Set Payload
+        createRelsPayload = {
+            "name": businessServiceName,
+            "comments": businessServiceComments,
+            "service_relations": serviceRelations
+        };
+        
+        // DEBUG
+        log("Create Rels Payload: " + JSON.stringify(createRelsPayload));
+        
+        // Call CIS with Payload
+        var createOrUpdateServiceHandler = new global.CreateOrUpdateITService();
+        createRelsResult =  createOrUpdateServiceHandler.processJSON(JSON.stringify(createRelsPayload));
+        
+        // DEBUG
+        log("Create Rels Result: " + JSON.stringify(createRelsResult));
+    
+    } catch (e) {
+        error(e.message);
+    }
+
+    /********************************************************************************/
+    /***                             Create Endpoints                             ***/
+    /********************************************************************************/     
+
+    try {
+
+        // Transform 3 - Endpoints
+        endpointItems = [];
+        for (var l = 0; l < services.length; l++) {
+            service = services[l];
+            // Parse URI
+            uri = parseUri(service.uri);
+            // Set Port Number if not specifiend for normal protocols
+            uriPort = (uri.protocol == 'http' && uri.port === '') ? uriPort = '80' : (uri.protocol == 'https' && uri.port === '') ? uriPort = '443' : uriPort = uri.port;
+            // Set Item
+            endpointItem = {
+                "className": ENDPOINTS,
+                "values": {
+                    "name": uri.source,
+                    "url": uri.source,
+                    "host_name": uri.host,
+                    "host": uri.host,
+                    "sys_class_name": ENDPOINTS,
+                    "sys_class_path": "/!!/!$/#J",
+                    "protocol": uri.protocol,
+                    "port": uriPort,
+                    "comments": COMMENTS
+                }
+            };
+            endpointItems.push(endpointItem);
+        }
+
+        // Set Payload
+        createEndpointsPayload = {
+            items: endpointItems
+        };
+
+        // DEBUG
+        log("Create Endpoints Payload: " + JSON.stringify(createEndpointsPayload));
+
+        // Call IES with Payload
+        createEndpointsResult = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(createEndpointsPayload)));
+
+        // DEBUG
+        log("Create Endpoints Result: " + JSON.stringify(createEndpointsResult));
+
+        // Create Endpoints Lookup
+        createdEndpointsItems = createEndpointsResult.items;
+        for (var m = 0; m < services.length; m++) {
+            endpointIDs[services[m].name] = createdEndpointsItems[m].sysId;
+        }
+        
+        // DEBUG
+        log("endpointIDs:" + JSON.stringify(endpointIDs));
+
+        // Add Manual Connections
+        var labsAtlas = new global.LabsAtlas();
+        labsAtlas.addManualConnection(services,serviceIDs,endpointIDs);
+
+    } catch (e) {
+        error(e.message);
+    }
+
+    // Create Response
+    responseData.code = '200';
+	responseData.type = "register_services";
+    responseData.message = "Services created in ServiceNow: " + services.length;
+
+    return responseData;
+
+})(request, response);
+
+// Parse URI
+function parseUri(str) {
+
+    parseUri.options = {
+       strictMode: false,
+       key: ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
+       q: {
+          name: "queryKey",
+          parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+       },
+       parser: {
+          strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+          loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+       }
+    };
+ 
+    var o = parseUri.options,
+       m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+       uri = {},
+       i = 14;
+ 
+    while (i--) uri[o.key[i]] = m[i] || "";
+ 
+    uri[o.q.name] = {};
+    uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+       if ($1) uri[o.q.name][$1] = $2;
+    });
+ 
+    return uri;
+ };
+
+// Log INFO
+function log(message) {
+    gs.info(message);
+}
+
+// Log ERROR
+function error(message) {
+    gs.error(message);
+}]]></operation_script>
+        <operation_uri>/api/x_snc_labs_atlas/v1/register/services</operation_uri>
+        <produces>application/json</produces>
+        <produces_customized>true</produces_customized>
+        <relative_path>/services</relative_path>
+        <request_example>[&#13;
+  {&#13;
+    "name": "string",&#13;
+    "host": "http://foo.com/api/v1/bar"&#13;
+  }&#13;
+]</request_example>
+        <requires_acl_authorization>false</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <requires_snc_internal_role>false</requires_snc_internal_role>
+        <short_description>Registers a list of Services with given input array</short_description>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2019-12-17 16:53:46</sys_created_on>
+        <sys_id>400ab591db390810e1ff9258db961904</sys_id>
+        <sys_mod_count>24</sys_mod_count>
+        <sys_name>Services  (v1)</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_operation_400ab591db390810e1ff9258db961904</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2019-12-20 21:12:31</sys_updated_on>
+        <web_service_definition display_value="NOW CLI API Register Services">2b576998db1100103b4a90b6db961977</web_service_definition>
+        <web_service_version display_value="v1">5768b1dddbf50810e1ff9258db961947</web_service_version>
+    </sys_ws_operation>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>b6f883e8dbce2c100ae3ac44d49619fb</instance_id>
+        <instance_name>aiopsstage02</instance_name>
+        <name>sys_ws_operation_400ab591db390810e1ff9258db961904</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;
+    &lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;
+        &lt;active&gt;true&lt;/active&gt;
+        &lt;consumes&gt;application/json&lt;/consumes&gt;
+        &lt;consumes_customized&gt;true&lt;/consumes_customized&gt;
+        &lt;default_operation_uri&gt;/api/x_snc_labs_atlas/register/services&lt;/default_operation_uri&gt;
+        &lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;
+        &lt;http_method&gt;POST&lt;/http_method&gt;
+        &lt;name&gt;Services  (v1)&lt;/name&gt;
+        &lt;operation_script&gt;&lt;![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    // Constants
+    var SERVICES = "cmdb_ci_service_discovered";
+    var ENDPOINTS = "cmdb_ci_endpoint_http";
+    var COMMENTS = "Added by NOW CLI";
+
+    // Input / Output
+    var requestData = request.body.data;
+    var responseData = {};
+
+    // Capture Business Service Properties
+    businessServiceName = requestData.name;
+    businessServiceComments = requestData.comments;
+
+    // Input Variables
+    services = requestData.services;
+    relationships = requestData.relationships;
+
+    // Global Variables
+    var serviceIDs = {};
+    var endpointIDs = {};
+    var createCIsResult = {};
+    var createRelsResult = {};
+    var createEndpointsResult = {};
+
+    /********************************************************************************/
+    /***                                Create CI's                               ***/
+    /********************************************************************************/
+
+    try {
+
+        // Transform 1 - Items
+        serviceItems = [];
+        for (var i = 0; i &lt; services.length; i++) {
+            service = services[i];
+            // Set Item
+            item1 = {
+                "className": SERVICES,
+                "values": {
+                    "name": service.name,
+                    "sys_class_name": SERVICES,
+                    "comments": COMMENTS
+                }
+            };
+            serviceItems.push(item1);
+        }
+
+        // Set Payload
+        createCIsPayload = {
+            items: serviceItems
+        };
+        
+        // DEBUG
+        log("Create CIs Payload: " + JSON.stringify(createCIsPayload));
+
+        // Call IES with Payload
+        createCIsResult = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(createCIsPayload)));
+        
+        // DEBUG
+        log("Create CIs Result: " + JSON.stringify(createCIsResult));
+
+    } catch (e) {
+        error(e.message);
+    }
+
+    /********************************************************************************/
+    /***                          Create Relationships                            ***/
+    /********************************************************************************/    
+
+    try {
+        
+        // Create Services Lookups
+        createdCIsItems = createCIsResult.items;
+        for (var j = 0; j &lt; services.length; j++) {
+            serviceIDs[services[j].name] = createdCIsItems[j].sysId;
+        }
+        
+        // Transform 2 - Service Relations
+        serviceRelations = [];
+        for (var k = 0; k &lt; relationships.length; k++) {
+            relationship = relationships[k];
+            // Test for nulls
+            parent = relationship.parent === null ? parent = null : parent = serviceIDs[relationship.parent];
+            child = relationship.child === null ? child = null : child = serviceIDs[relationship.child];
+            // Set Service Relation
+            serviceRelation = {
+                "parent": parent,
+                "child": child
+            };
+            serviceRelations.push(serviceRelation);
+        }   
+
+        // Set Payload
+        createRelsPayload = {
+            "name": businessServiceName,
+            "comments": businessServiceComments,
+            "service_relations": serviceRelations
+        };
+        
+        // DEBUG
+        log("Create Rels Payload: " + JSON.stringify(createRelsPayload));
+        
+        // Call CIS with Payload
+        var createOrUpdateServiceHandler = new global.CreateOrUpdateITService();
+        createRelsResult =  createOrUpdateServiceHandler.processJSON(JSON.stringify(createRelsPayload));
+        
+        // DEBUG
+        log("Create Rels Result: " + JSON.stringify(createRelsResult));
+    
+    } catch (e) {
+        error(e.message);
+    }
+
+    /********************************************************************************/
+    /***                             Create Endpoints                             ***/
+    /********************************************************************************/     
+
+    try {
+
+        // Transform 3 - Endpoints
+        endpointItems = [];
+        for (var l = 0; l &lt; services.length; l++) {
+            service = services[l];
+            // Parse URI
+            uri = parseUri(service.uri);
+            // Set Port Number if not specifiend for normal protocols
+            uriPort = (uri.protocol == 'http' &amp;&amp; uri.port === '') ? uriPort = '80' : (uri.protocol == 'https' &amp;&amp; uri.port === '') ? uriPort = '443' : uriPort = uri.port;
+            // Set Item
+            endpointItem = {
+                "className": ENDPOINTS,
+                "values": {
+                    "name": uri.source,
+                    "url": uri.source,
+                    "host_name": uri.host,
+                    "host": uri.host,
+                    "sys_class_name": ENDPOINTS,
+                    "sys_class_path": "/!!/!$/#J",
+                    "protocol": uri.protocol,
+                    "port": uriPort,
+                    "comments": COMMENTS
+                }
+            };
+            endpointItems.push(endpointItem);
+        }
+
+        // Set Payload
+        createEndpointsPayload = {
+            items: endpointItems
+        };
+
+        // DEBUG
+        log("Create Endpoints Payload: " + JSON.stringify(createEndpointsPayload));
+
+        // Call IES with Payload
+        createEndpointsResult = JSON.parse(sn_cmdb.IdentificationEngine.createOrUpdateCI("ServiceNow", JSON.stringify(createEndpointsPayload)));
+
+        // DEBUG
+        log("Create Endpoints Result: " + JSON.stringify(createEndpointsResult));
+
+        // Create Endpoints Lookup
+        createdEndpointsItems = createEndpointsResult.items;
+        for (var m = 0; m &lt; services.length; m++) {
+            endpointIDs[services[m].name] = createdEndpointsItems[m].sysId;
+        }
+        
+        // DEBUG
+        log("endpointIDs:" + JSON.stringify(endpointIDs));
+
+        // Add Manual Connections
+        var labsAtlas = new global.LabsAtlas();
+        labsAtlas.addManualConnection(services,serviceIDs,endpointIDs);
+
+    } catch (e) {
+        error(e.message);
+    }
+
+    // Create Response
+    responseData.code = '200';
+	responseData.type = "register_services";
+    responseData.message = "Services created in ServiceNow: " + services.length;
+
+    return responseData;
+
+})(request, response);
+
+// Parse URI
+function parseUri(str) {
+
+    parseUri.options = {
+       strictMode: false,
+       key: ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
+       q: {
+          name: "queryKey",
+          parser: /(?:^|&amp;)([^&amp;=]*)=?([^&amp;]*)/g
+       },
+       parser: {
+          strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+          loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+       }
+    };
+ 
+    var o = parseUri.options,
+       m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+       uri = {},
+       i = 14;
+ 
+    while (i--) uri[o.key[i]] = m[i] || "";
+ 
+    uri[o.q.name] = {};
+    uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+       if ($1) uri[o.q.name][$1] = $2;
+    });
+ 
+    return uri;
+ };
+
+// Log INFO
+function log(message) {
+    gs.info(message);
+}
+
+// Log ERROR
+function error(message) {
+    gs.error(message);
+}]]&gt;&lt;/operation_script&gt;
+        &lt;operation_uri&gt;/api/x_snc_labs_atlas/v1/register/services&lt;/operation_uri&gt;
+        &lt;produces&gt;application/json&lt;/produces&gt;
+        &lt;produces_customized&gt;true&lt;/produces_customized&gt;
+        &lt;relative_path&gt;/services&lt;/relative_path&gt;
+        &lt;request_example&gt;[&amp;#13;
+  {&amp;#13;
+    "name": "string",&amp;#13;
+    "host": "http://foo.com/api/v1/bar"&amp;#13;
+  }&amp;#13;
+]&lt;/request_example&gt;
+        &lt;requires_acl_authorization&gt;false&lt;/requires_acl_authorization&gt;
+        &lt;requires_authentication&gt;true&lt;/requires_authentication&gt;
+        &lt;requires_snc_internal_role&gt;false&lt;/requires_snc_internal_role&gt;
+        &lt;short_description&gt;Registers a list of Services with given input array&lt;/short_description&gt;
+        &lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;
+        &lt;sys_created_by&gt;aangelo&lt;/sys_created_by&gt;
+        &lt;sys_created_on&gt;2019-12-17 16:53:46&lt;/sys_created_on&gt;
+        &lt;sys_id&gt;400ab591db390810e1ff9258db961904&lt;/sys_id&gt;
+        &lt;sys_mod_count&gt;24&lt;/sys_mod_count&gt;
+        &lt;sys_name&gt;Services  (v1)&lt;/sys_name&gt;
+        &lt;sys_package display_value="Atlas" source="x_snc_labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_package&gt;
+        &lt;sys_policy/&gt;
+        &lt;sys_scope display_value="Atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_scope&gt;
+        &lt;sys_update_name&gt;sys_ws_operation_400ab591db390810e1ff9258db961904&lt;/sys_update_name&gt;
+        &lt;sys_updated_by&gt;aangelo&lt;/sys_updated_by&gt;
+        &lt;sys_updated_on&gt;2019-12-20 21:12:31&lt;/sys_updated_on&gt;
+        &lt;web_service_definition display_value="NOW CLI API Register Services"&gt;2b576998db1100103b4a90b6db961977&lt;/web_service_definition&gt;
+        &lt;web_service_version display_value="v1"&gt;5768b1dddbf50810e1ff9258db961947&lt;/web_service_version&gt;
+    &lt;/sys_ws_operation&gt;
+&lt;/record_update&gt;</payload>
+        <payload_hash>-1940824040</payload_hash>
+        <record_name>Services  (v1)</record_name>
+        <reverted_from/>
+        <source>dfce1396dbde2050d5aa86171b96195c</source>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2021-02-15 15:41:50</sys_created_on>
+        <sys_id>f7ce5396dbde2050d5aa86171b961913</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>177a65ae4640000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2021-02-15 15:41:50</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>b7ce5396efde2050b96271ee83000813</update_guid>
+        <update_guid_history>b7ce5396efde2050b96271ee83000813:-1940824040</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2021-02-15 15:43:01</sys_created_on>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>0954a984f2034859a7c47f2e0f52a8b1</sys_id>
+        <sys_metadata>400ab591db390810e1ff9258db961904</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Services  (v1)</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_400ab591db390810e1ff9258db961904</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_400ab591db390810e1ff9258db961904">f7ce5396dbde2050d5aa86171b961913</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2021-02-15 15:43:01</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
