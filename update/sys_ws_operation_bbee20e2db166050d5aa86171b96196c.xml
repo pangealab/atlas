@@ -24,6 +24,7 @@
         return;
     }
 
+	// Set event from Request
     var event = requestBody;
 
 	// Create a new GlideRecord pointing at the event table and prepare it for insert
@@ -36,11 +37,8 @@
 	// Events from Grafana will be bound to CIs on the Application Services table so we set the CI Type field accordingly
 	event_GR.ci_type = 'cmdb_ci_service_discovered';
 	
-	// We are using the name of the rule that was violated as the "Resource" in the event
+	// We are using the Grafana Rule Name as the "Resource" in the event
     event_GR.resource = event.ruleName;
-	
-	// We are using the rule identifer as the "Metric Name" in the event
-    event_GR.metric_name = event.ruleId;
 	
 	// If this Grafana event is a rising event there should be "evalMatches" in the event so we are going to dig in and pluck out relevant parts of the first metric.
 	// As previously mentioned we collapse all metric violations into a single ServiceNow event so we can properly clear alerts due to limitations with the Grafana notifications.
@@ -59,11 +57,15 @@
 		//  To prevent matching other CIs in the system that have the same name we are telling event management that we only want to look at CIs directly in the Application Services table
 		id_attributes.sys_class_name = 'cmdb_ci_service_discovered';
 		
-		// Now that we have defined how to find the proper CI we JSON encode the lookup and put it into the CI Identifier field on theevent
+		// Now that we have defined how to find the proper CI we JSON encode the lookup and put it into the CI Identifier field on the event
 		event_GR.ci_identifier = JSON.stringify(id_attributes);
 		
 		// We also use the "app" tag to set the Node value in the event so we are consistent
-		event_GR.node = event.evalMatches[0].tags.app;
+		event_GR.node = app;
+		
+		// We are using the Grafana Metric as the "Metric Name" in the event
+		metric_name = event.evalMatches[0].metric;
+		event_GR.metric_name = metric_name;
 	}
 	
 	// If the incoming event contained a "message" field we use that to set our new event Description
@@ -119,14 +121,14 @@
         <sys_created_by>aangelo</sys_created_by>
         <sys_created_on>2021-02-15 21:31:53</sys_created_on>
         <sys_id>bbee20e2db166050d5aa86171b96196c</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>7</sys_mod_count>
         <sys_name>Event (v2)</sys_name>
         <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
         <sys_update_name>sys_ws_operation_bbee20e2db166050d5aa86171b96196c</sys_update_name>
         <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2021-02-15 21:55:14</sys_updated_on>
+        <sys_updated_on>2021-02-15 23:07:43</sys_updated_on>
         <web_service_definition display_value="NOW CLI API Create Event">eca55852db9104d0e1ff9258db9619b6</web_service_definition>
         <web_service_version display_value="v2">67eee8a2db166050d5aa86171b961905</web_service_version>
     </sys_ws_operation>
