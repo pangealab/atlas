@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege">
+    <sys_scope_privilege action="INSERT_OR_UPDATE">
+        <operation>execute</operation>
+        <source_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</source_scope>
+        <status>allowed</status>
+        <sys_class_name>sys_scope_privilege</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2021-02-15 20:23:34</sys_created_on>
+        <sys_id>3a4fdce2dbd26050d5aa86171b96191f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Glide API: user roles and groups</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_scope_privilege_3a4fdce2dbd26050d5aa86171b96191f</sys_update_name>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2021-02-15 20:23:34</sys_updated_on>
+        <target_name>Glide API: user roles and groups</target_name>
+        <target_scope display_value="Global">global</target_scope>
+        <target_type>scriptable</target_type>
+    </sys_scope_privilege>
+</record_update>

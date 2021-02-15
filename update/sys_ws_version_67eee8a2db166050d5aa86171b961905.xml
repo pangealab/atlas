@@ -2,22 +2,22 @@
     <sys_ws_version action="INSERT_OR_UPDATE">
         <active>true</active>
         <deprecated>false</deprecated>
-        <is_default>true</is_default>
+        <is_default>false</is_default>
         <short_description/>
         <sys_class_name>sys_ws_version</sys_class_name>
         <sys_created_by>aangelo</sys_created_by>
-        <sys_created_on>2019-12-17 16:58:00</sys_created_on>
-        <sys_id>4efaf115db390810e1ff9258db961967</sys_id>
-        <sys_mod_count>1</sys_mod_count>
-        <sys_name>v1</sys_name>
+        <sys_created_on>2021-02-15 21:31:53</sys_created_on>
+        <sys_id>67eee8a2db166050d5aa86171b961905</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>v2</sys_name>
         <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
         <sys_policy/>
         <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
-        <sys_update_name>sys_ws_version_4efaf115db390810e1ff9258db961967</sys_update_name>
+        <sys_update_name>sys_ws_version_67eee8a2db166050d5aa86171b961905</sys_update_name>
         <sys_updated_by>aangelo</sys_updated_by>
-        <sys_updated_on>2019-12-17 16:58:00</sys_updated_on>
-        <version>1</version>
-        <version_id>v1</version_id>
+        <sys_updated_on>2021-02-15 21:31:53</sys_updated_on>
+        <version>2</version>
+        <version_id>v2</version_id>
         <web_service_definition display_value="NOW CLI API Create Event">eca55852db9104d0e1ff9258db9619b6</web_service_definition>
     </sys_ws_version>
 </record_update>

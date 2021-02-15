@@ -4,7 +4,7 @@
         <base_uri>/api/x_snc_labs_atlas/create</base_uri>
         <consumes>application/json,application/xml,text/xml</consumes>
         <consumes_customized>false</consumes_customized>
-        <default_version>v1</default_version>
+        <default_version>No active default version</default_version>
         <doc_link/>
         <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
         <is_versioned>true</is_versioned>

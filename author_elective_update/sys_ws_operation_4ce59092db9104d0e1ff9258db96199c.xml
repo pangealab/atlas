@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri>/api/x_snc_labs_atlas/create/event</default_operation_uri>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Event (v1)</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	
+	// This scripted rest API receives events from Grafana and creates entries on the Event table
+	// For more information on the Grafana web hook used for Alert notifications see https://grafana.com/docs/grafana/latest/alerting/notifications/
+	//   Though Grafana can send multiple metric entries for each rule it does not include which metrics were originally violated when a rule clearing notification is sent.
+	//   For this reason we are only creating a single event per rule violation instead of unique events for each violated metric.
+	
+	// Grab the body of the request
+    var requestBody = request.body.data;
+
+	// Did we have a Grafana event in the body?
+    if (Object.keys(requestBody).length == 0) {
+        response.setError(new sn_ws_err.BadRequestError('No event found'));
+		gs.warn("Grafana failed to create event: No event");
+        return;
+    }
+
+    var event = requestBody;
+
+	// Create a new GlideRecord pointing at the event table and prepare it for insert
+    var event_GR = new GlideRecord('em_event');
+    event_GR.initialize();
+
+	// Set the source to Grafana so we know where this event originated from
+    event_GR.source = "Grafana";
+
+	// Events from Grafana will be bound to CIs on the Application Services table so we set the CI Type field accordingly
+	event_GR.ci_type = 'cmdb_ci_service_discovered';
+	
+	// We are using the name of the rule that was violated as the "Resource" in the event
+    event_GR.resource = event.ruleName;
+	// We are using the rule identifer as the "Metric Name" in the event
+    event_GR.metric_name = event.ruleId;
+	
+	// If this Grafana event is a rising event there should be "evalMatches" in the event so we are going to dig in and pluck out relevant parts of the first metric.
+	//   As previously mentioned we collapse all metric violations into a single ServiceNow event so we can properly clear alerts due to limitations with the Grafana notifications.
+	//   Due to this we only look at the first evalMatch in the Grafana event even if there are multiple entries.
+	if (event.evalMatches[0]){
+		// In order to properly bind the CI to the service CI we want to help tell event managment how to find the CI as the standard Node lookup wont work in our case
+		var id_attributes = {};
+		// The Grafana tag "app" contains the name of the service being monitored.  This must align with the name of an Application Service in ServiceNow
+		//     In this case we are setting up a filter to only bind to a CI where the "name" of the CI matches the "app" tag of the incoming Grafana event
+		id_attributes.name = event.evalMatches[0].tags.app;
+		//  To prevent matching other CIs in the system that have the same name we are telling event management that we only want to look at CIs directly in the Application Services table
+		id_attributes.sys_class_name = 'cmdb_ci_service_discovered';
+		// Now that we have defined how to find the proper CI we JSON encode the lookup and put it into the CI Identifier field on theevent
+		event_GR.ci_identifier = JSON.stringify(id_attributes);
+		
+		// We also use the "app" tag to set the Node value in the event so we are consistent
+		event_GR.node = event.evalMatches[0].tags.app;
+	}
+	
+	// If the incoming event contained a "message" field we use that to set our new event Description
+	if (event.message) { event_GR.description = event.message; }
+	// But if we dont have a "message" then we just use the ruleName as the Description
+	else { event_GR.description = event.ruleName; }
+	// The message key is used to deduplicate events into a single alert.  All incoming events with the same message key will be tied to a single alert in the Alert table so we need to make sure our 
+	//   message key is sufficiently unique to only combine alerts from the same service & rule, but not so unique multiple violations of the same rule on the same service dont create seperate alerts
+	//   We are using the combination of the "ruleUrl" and the "ruleId" to create a message key.
+    event_GR.message_key = event.ruleUrl + "|" + event.ruleId;
+	
+	// We are defaulting the resolution state to "New" meaning this will be a "rising" event by default.  We will then check the event state to decide if we should actually make it a closing alert
+    event_GR.resolution_state = "New";
+
+	// Set the event Severity to Major if Grafana is "alerting".  If the Grafana Severity is "ok" we set the event to clear and the Resolution State to "Closing" so we clear the associated Alert.
+	//  Any other Grafana state goes to Minor.
+    switch (event.state) {
+        case 'alerting':
+            event_GR.severity = 2;
+            break;
+        case 'ok':
+            event_GR.severity = "0";
+            event_GR.resolution_state = 'Closing';
+            break;
+        default:
+            event_GR.severity = 3;
+    }
+
+	// We are going to put the entire Grafana event into the Additional Info field as JSON so we can optionally use any other event info downstream in event rules etc.
+    event_GR.additional_info = JSON.stringify(event);
+
+	// We are done with the initial event parsing so we are inserting the event and standard Event Managment processing takes over from here!
+    event_GR.insert();
+
+	return "Event created with sys_id " + event_GR.sys_id;
+
+})(request, response);
+]]></operation_script>
+        <operation_uri>/api/x_snc_labs_atlas/v1/create/event</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/event</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>ewilliams</sys_created_by>
+        <sys_created_on>2019-11-25 15:39:49</sys_created_on>
+        <sys_id>4ce59092db9104d0e1ff9258db96199c</sys_id>
+        <sys_mod_count>26</sys_mod_count>
+        <sys_name>Event (v1)</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_update_name>sys_ws_operation_4ce59092db9104d0e1ff9258db96199c</sys_update_name>
+        <sys_updated_by>ewilliams</sys_updated_by>
+        <sys_updated_on>2020-01-08 14:59:45</sys_updated_on>
+        <web_service_definition display_value="NOW CLI API Create Event">eca55852db9104d0e1ff9258db9619b6</web_service_definition>
+        <web_service_version display_value="v1">4efaf115db390810e1ff9258db961967</web_service_version>
+    </sys_ws_operation>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</application>
+        <file_path/>
+        <instance_id>b6f883e8dbce2c100ae3ac44d49619fb</instance_id>
+        <instance_name>aiopsstage02</instance_name>
+        <name>sys_ws_operation_4ce59092db9104d0e1ff9258db96199c</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;
+    &lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;
+        &lt;active&gt;true&lt;/active&gt;
+        &lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;
+        &lt;consumes_customized&gt;false&lt;/consumes_customized&gt;
+        &lt;default_operation_uri&gt;/api/x_snc_labs_atlas/create/event&lt;/default_operation_uri&gt;
+        &lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;
+        &lt;http_method&gt;POST&lt;/http_method&gt;
+        &lt;name&gt;Event (v1)&lt;/name&gt;
+        &lt;operation_script&gt;&lt;![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	
+	// This scripted rest API receives events from Grafana and creates entries on the Event table
+	// For more information on the Grafana web hook used for Alert notifications see https://grafana.com/docs/grafana/latest/alerting/notifications/
+	//   Though Grafana can send multiple metric entries for each rule it does not include which metrics were originally violated when a rule clearing notification is sent.
+	//   For this reason we are only creating a single event per rule violation instead of unique events for each violated metric.
+	
+	// Grab the body of the request
+    var requestBody = request.body.data;
+
+	// Did we have a Grafana event in the body?
+    if (Object.keys(requestBody).length == 0) {
+        response.setError(new sn_ws_err.BadRequestError('No event found'));
+		gs.warn("Grafana failed to create event: No event");
+        return;
+    }
+
+    var event = requestBody;
+
+	// Create a new GlideRecord pointing at the event table and prepare it for insert
+    var event_GR = new GlideRecord('em_event');
+    event_GR.initialize();
+
+	// Set the source to Grafana so we know where this event originated from
+    event_GR.source = "Grafana";
+
+	// Events from Grafana will be bound to CIs on the Application Services table so we set the CI Type field accordingly
+	event_GR.ci_type = 'cmdb_ci_service_discovered';
+	
+	// We are using the name of the rule that was violated as the "Resource" in the event
+    event_GR.resource = event.ruleName;
+	// We are using the rule identifer as the "Metric Name" in the event
+    event_GR.metric_name = event.ruleId;
+	
+	// If this Grafana event is a rising event there should be "evalMatches" in the event so we are going to dig in and pluck out relevant parts of the first metric.
+	//   As previously mentioned we collapse all metric violations into a single ServiceNow event so we can properly clear alerts due to limitations with the Grafana notifications.
+	//   Due to this we only look at the first evalMatch in the Grafana event even if there are multiple entries.
+	if (event.evalMatches[0]){
+		// In order to properly bind the CI to the service CI we want to help tell event managment how to find the CI as the standard Node lookup wont work in our case
+		var id_attributes = {};
+		// The Grafana tag "app" contains the name of the service being monitored.  This must align with the name of an Application Service in ServiceNow
+		//     In this case we are setting up a filter to only bind to a CI where the "name" of the CI matches the "app" tag of the incoming Grafana event
+		id_attributes.name = event.evalMatches[0].tags.app;
+		//  To prevent matching other CIs in the system that have the same name we are telling event management that we only want to look at CIs directly in the Application Services table
+		id_attributes.sys_class_name = 'cmdb_ci_service_discovered';
+		// Now that we have defined how to find the proper CI we JSON encode the lookup and put it into the CI Identifier field on theevent
+		event_GR.ci_identifier = JSON.stringify(id_attributes);
+		
+		// We also use the "app" tag to set the Node value in the event so we are consistent
+		event_GR.node = event.evalMatches[0].tags.app;
+	}
+	
+	// If the incoming event contained a "message" field we use that to set our new event Description
+	if (event.message) { event_GR.description = event.message; }
+	// But if we dont have a "message" then we just use the ruleName as the Description
+	else { event_GR.description = event.ruleName; }
+	// The message key is used to deduplicate events into a single alert.  All incoming events with the same message key will be tied to a single alert in the Alert table so we need to make sure our 
+	//   message key is sufficiently unique to only combine alerts from the same service &amp; rule, but not so unique multiple violations of the same rule on the same service dont create seperate alerts
+	//   We are using the combination of the "ruleUrl" and the "ruleId" to create a message key.
+    event_GR.message_key = event.ruleUrl + "|" + event.ruleId;
+	
+	// We are defaulting the resolution state to "New" meaning this will be a "rising" event by default.  We will then check the event state to decide if we should actually make it a closing alert
+    event_GR.resolution_state = "New";
+
+	// Set the event Severity to Major if Grafana is "alerting".  If the Grafana Severity is "ok" we set the event to clear and the Resolution State to "Closing" so we clear the associated Alert.
+	//  Any other Grafana state goes to Minor.
+    switch (event.state) {
+        case 'alerting':
+            event_GR.severity = 2;
+            break;
+        case 'ok':
+            event_GR.severity = "0";
+            event_GR.resolution_state = 'Closing';
+            break;
+        default:
+            event_GR.severity = 3;
+    }
+
+	// We are going to put the entire Grafana event into the Additional Info field as JSON so we can optionally use any other event info downstream in event rules etc.
+    event_GR.additional_info = JSON.stringify(event);
+
+	// We are done with the initial event parsing so we are inserting the event and standard Event Managment processing takes over from here!
+    event_GR.insert();
+
+	return "Event created with sys_id " + event_GR.sys_id;
+
+})(request, response);
+]]&gt;&lt;/operation_script&gt;
+        &lt;operation_uri&gt;/api/x_snc_labs_atlas/v1/create/event&lt;/operation_uri&gt;
+        &lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;
+        &lt;produces_customized&gt;false&lt;/produces_customized&gt;
+        &lt;relative_path&gt;/event&lt;/relative_path&gt;
+        &lt;request_example/&gt;
+        &lt;requires_acl_authorization&gt;true&lt;/requires_acl_authorization&gt;
+        &lt;requires_authentication&gt;true&lt;/requires_authentication&gt;
+        &lt;requires_snc_internal_role&gt;true&lt;/requires_snc_internal_role&gt;
+        &lt;short_description/&gt;
+        &lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;
+        &lt;sys_created_by&gt;ewilliams&lt;/sys_created_by&gt;
+        &lt;sys_created_on&gt;2019-11-25 15:39:49&lt;/sys_created_on&gt;
+        &lt;sys_id&gt;4ce59092db9104d0e1ff9258db96199c&lt;/sys_id&gt;
+        &lt;sys_mod_count&gt;26&lt;/sys_mod_count&gt;
+        &lt;sys_name&gt;Event (v1)&lt;/sys_name&gt;
+        &lt;sys_package display_value="Atlas" source="x_snc_labs_atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_package&gt;
+        &lt;sys_policy/&gt;
+        &lt;sys_scope display_value="Atlas"&gt;6d50983edb0508143b4a90b6db9619fc&lt;/sys_scope&gt;
+        &lt;sys_update_name&gt;sys_ws_operation_4ce59092db9104d0e1ff9258db96199c&lt;/sys_update_name&gt;
+        &lt;sys_updated_by&gt;ewilliams&lt;/sys_updated_by&gt;
+        &lt;sys_updated_on&gt;2020-01-08 14:59:45&lt;/sys_updated_on&gt;
+        &lt;web_service_definition display_value="NOW CLI API Create Event"&gt;eca55852db9104d0e1ff9258db9619b6&lt;/web_service_definition&gt;
+        &lt;web_service_version display_value="v1"&gt;4efaf115db390810e1ff9258db961967&lt;/web_service_version&gt;
+    &lt;/sys_ws_operation&gt;
+&lt;/record_update&gt;</payload>
+        <payload_hash>-554064207</payload_hash>
+        <record_name>Event (v1)</record_name>
+        <reverted_from/>
+        <source>dfce1396dbde2050d5aa86171b96195c</source>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2021-02-15 15:41:50</sys_created_on>
+        <sys_id>00de5396dbde2050d5aa86171b961916</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>177a65ae4b40000001</sys_recorded_at>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2021-02-15 15:41:50</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>ccde539677de2050834c76c61bd47715</update_guid>
+        <update_guid_history>ccde539677de2050834c76c61bd47715:-554064207</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>aangelo</sys_created_by>
+        <sys_created_on>2021-02-15 21:32:10</sys_created_on>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>182ae981f6724af8841b1cc86bfc8b81</sys_id>
+        <sys_metadata>4ce59092db9104d0e1ff9258db96199c</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Event (v1)</sys_name>
+        <sys_package display_value="Atlas" source="x_snc_labs_atlas">6d50983edb0508143b4a90b6db9619fc</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Atlas">6d50983edb0508143b4a90b6db9619fc</sys_scope>
+        <sys_scope_delete display_value="">3f900d2c77004724a51ea50adc8e7379</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_4ce59092db9104d0e1ff9258db96199c</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_4ce59092db9104d0e1ff9258db96199c">00de5396dbde2050d5aa86171b961916</sys_update_version>
+        <sys_updated_by>aangelo</sys_updated_by>
+        <sys_updated_on>2021-02-15 21:32:10</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
